@@ -5,6 +5,43 @@ Mais recente no topo.
 
 ---
 
+## 2026-05-14 — Consolidação: M1 (cockpit MVP completo) substitui F2.1+F3+F4+F5
+
+Decisão estratégica do Rick: trocar velocidade por granularidade.
+Em vez de 4 tasks sequenciais (F2.1 hotfixes → F3 Lista → F4 Detalhe
+→ F5 Dashboard), uma única task **M1 — cockpit MVP completo** agrupa
+tudo. Motivação: reduzir overhead de orquestração (briefs, reviews,
+merges, switching de contexto), agente tem visão holística pra
+otimizar entre telas, padrões nascem consistentes.
+
+Trade-off aceito: brief gigante = risco de yak-shaving / PR enorme
+/ rollback tudo-ou-nada. Brief M1 mitiga via macro-blocos de commit
+sugeridos + lembrete explícito de não inventar features além do
+escopo.
+
+Decisões em aberto que ficavam pra cada tela foram **fechadas
+antecipadamente no brief M1**:
+
+- **Forms**: react-hook-form + zod + @hookform/resolvers (zod casa
+  com validação do PATCH — single source of truth).
+- **Charts**: recharts (IA pilota melhor que Tremor; estética vem
+  de Tailwind/shadcn de qualquer jeito).
+- **Toast**: sonner via `shadcn add sonner`.
+- **Tabela**: shadcn `<Table>` + paginação manual. Sem TanStack
+  Table (overkill pra ≤200 linhas/página).
+- **Date inputs**: HTML5 nativo. Sem react-day-picker / date-fns.
+- **Formatação**: `Intl.*` nativo, locale pt-BR, currency USD.
+
+Estimativa M1: ~6-10h com IA. Lembrete embutido no brief: se
+estourar muito (>15h), pare e reporte — não empurre.
+
+Estado atual antes de M1 começar:
+- Worktree F2 ainda montada (task-end.sh quebrou em squash merge,
+  M1 conserta como parte do hotfix 0.3).
+- F2.1 brief existe mas é absorvido (hotfixes viram seção 0 do M1).
+
+---
+
 ## 2026-05-14 — F1 + F2 entregues; F2.1 (hotfixes) destrancado
 
 Par paralelo F1 (camada de dados) + F2 (UI tooling + shell) executado

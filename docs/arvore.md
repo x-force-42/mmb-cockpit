@@ -20,19 +20,20 @@ deixando "operação ao vivo" pra v2.
 
 ## Onde estamos
 
-**Infra entregue, telas próximas.** F0 + F1 + F2 mergeados em
-master. Stack toda decidida (TanStack Query + MSW + Tailwind v4 +
-shadcn/ui preset radix-nova + feature folders). F2.1 (hotfixes
-pequenos pós-F2) é o último passo antes das telas. Depois disso,
-F3 (Lista) começa.
+**Modo velocidade: MVP empacotado.** F0 + F1 + F2 mergeados. F2.1
+(hotfixes) + F3 (Lista) + F4 (Detalhe) + F5 (Dashboard) **foram
+consolidados na task M1 — cockpit MVP completo**, agora ativa.
+Em vez de 4 tasks sequenciais com overhead de orquestração,
+um único agente entrega o MVP ponta-a-ponta. Decisões adicionais
+fechadas no brief: react-hook-form + zod (forms), recharts (charts),
+sonner (toast).
 
 ```
-PASSADO                         PRESENTE         FUTURO
-●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ ━ ━ →
-F0 scaffold ✅                  F2.1 hotfixes 🎯
-F1 data layer ✅                                F3 Lista
-F2 UI + shell ✅                                F4 Detalhe
-                                                F5 Dashboard
+PASSADO                                  PRESENTE          FUTURO
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ ━ →
+F0 scaffold ✅                           M1 cockpit MVP 🎯
+F1 data layer ✅                          (3 telas + hotfixes)
+F2 UI + shell ✅                                            v2 (a discutir)
 ```
 
 ## Roadmap concreto
@@ -42,10 +43,20 @@ F2 UI + shell ✅                                F4 Detalhe
 | F0 ✅ | Scaffold base | repo todo | — |
 | F1 ✅ | Camada de dados | `src/api/`, `src/types/` | F0 |
 | F2 ✅ | UI tooling + shell | `src/components/layout/`, `src/components/ui/`, `src/index.css` | F0 |
-| F2.1 🎯 | Hotfixes (vitest, shadcn dep, task-end) | `vite.config.ts`, `package.json`, `scripts/task-end.sh` | F1 + F2 |
-| F3 | Tela: Lista de runs | `src/features/runs/` | F2.1 |
-| F4 | Tela: Detalhe + edição | `src/features/runs/` (compartilha com F3) | F3 (padrões) |
-| F5 | Tela: Dashboard | `src/features/dashboard/` | F2.1 (charts: decide na hora) |
+| **M1** 🎯 | **Cockpit MVP completo** (3 telas + hotfixes) | `src/features/{runs,dashboard}/`, `vite.config.ts`, `scripts/task-end.sh`, etc. | F1 + F2 |
+| ~~F2.1, F3, F4, F5~~ | ~~granular~~ | 🔀 absorvido por M1 | — |
+
+## Pós-MVP (a discutir após M1 mergear)
+
+Quando o MVP estiver em master, próximas frentes possíveis:
+
+- **Conectar à API real do MMB** quando E1 mergear no MMB
+  (até lá, dev roda só contra MSW).
+- **Refinos de UX** descobertos no uso real.
+- **Telas v2**: catálogo de projetos, detalhe de projeto,
+  comparativo de modelos (depende B1/B2/B3 do MMB).
+- **Operação ao vivo** (WebSocket) — eventual sobreposição com
+  aquário.
 
 ## Convenção de modularização
 
