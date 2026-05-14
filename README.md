@@ -24,9 +24,6 @@ Foco do MVP (decidido no discovery `mr-meeseeks-box/docs/tasks/E0-discovery-cock
 
 ## Como rodar
 
-Pré-requisito: API do MMB no ar (`scripts/api.sh` no repo MMB,
-porta 8765 default).
-
 ```bash
 # Setup uma vez:
 npm install
@@ -41,6 +38,29 @@ npm run test:run     # Vitest single-shot
 # Build:
 npm run build
 ```
+
+Em dev o MSW está **ligado por padrão** (via `.env.development`).
+Você não precisa da API do MMB rodando localmente — as fixtures
+em `src/api/mocks/fixtures/` cobrem os 5 endpoints.
+
+### Variáveis de ambiente
+
+| Variável | Default (dev) | O que faz |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:8765` | Onde o client HTTP aponta. |
+| `VITE_ENABLE_MSW` | `true` | Se `true`, intercepta `/api/*` no browser. |
+
+Pra apontar pro MMB real (sem mock), crie `.env.local` com:
+
+```
+VITE_ENABLE_MSW=false
+VITE_API_BASE_URL=http://localhost:8765
+```
+
+`.env.local` é gitignored e sobrescreve o `.env.development`.
+
+Pra testes (Vitest), o MSW roda em modo Node automaticamente via
+`src/setupTests.ts` — independente das variáveis acima.
 
 ## Status
 
