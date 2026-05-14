@@ -21,7 +21,7 @@ Legenda: ✅ entregue · 🎯 pronto pra delegar · ⚡ paraleliza · 🔒 bloqu
 | ID | Título | Status | Brief |
 |---|---|---|---|
 | **F0** | Scaffold do projeto Vite+React+TS+Vitest | ✅ entregue | [`F0-scaffold.md`](F0-scaffold.md) |
-| **F1** | Camada de dados — API client + TanStack Query + MSW | 🎯 pronto · ⚡ com F2 | [`F1-data-layer.md`](F1-data-layer.md) |
+| **F1** | Camada de dados — API client + TanStack Query + MSW | ✅ entregue | [`F1-data-layer.md`](F1-data-layer.md) |
 | **F2** | UI tooling + layout shell — Tailwind + shadcn + chrome | 🎯 pronto · ⚡ com F1 | [`F2-ui-shell.md`](F2-ui-shell.md) |
 | F3 | Tela: Lista de runs | 🔒 espera F1 + F2 | (a criar) |
 | F4 | Tela: Detalhe de run + edição | 🔒 espera F1 + F2 + F3 (padrões) | (a criar) |
