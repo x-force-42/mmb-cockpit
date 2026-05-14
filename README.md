@@ -44,8 +44,11 @@ npm run build
 
 ## Status
 
-Em **bootstrap**. Scaffold ainda não criado — primeira task
-(F0) cuida disso.
+**Infra em paralelo.** F0 (scaffold) entregue. Próximo lote: F1
+(camada de dados — TanStack Query + MSW) e F2 (UI tooling + layout
+shell — Tailwind + shadcn) paralelizáveis. Telas (F3-F5) começam
+quando ambos mergearem. Ver `docs/arvore.md` pro roadmap completo
+e `docs/tasks/INDEX.md` pras tasks abertas.
 
 ## Operação como agente
 

@@ -16,19 +16,41 @@ quer? Siga:
 
 ## Status atual
 
+Legenda: ✅ entregue · 🎯 pronto pra delegar · ⚡ paraleliza · 🔒 bloqueado
+
 | ID | Título | Status | Brief |
 |---|---|---|---|
-| **F0** | Scaffold do projeto Vite+React+TS+Vitest | 🎯 pronto | [`F0-scaffold.md`](F0-scaffold.md) |
-| F1+ | Tasks subsequentes (a definir) | 🔒 espera F0 mergear + discovery do orquestrador | (a criar) |
+| **F0** | Scaffold do projeto Vite+React+TS+Vitest | ✅ entregue | [`F0-scaffold.md`](F0-scaffold.md) |
+| **F1** | Camada de dados — API client + TanStack Query + MSW | 🎯 pronto · ⚡ com F2 | [`F1-data-layer.md`](F1-data-layer.md) |
+| **F2** | UI tooling + layout shell — Tailwind + shadcn + chrome | 🎯 pronto · ⚡ com F1 | [`F2-ui-shell.md`](F2-ui-shell.md) |
+| F3 | Tela: Lista de runs | 🔒 espera F1 + F2 | (a criar) |
+| F4 | Tela: Detalhe de run + edição | 🔒 espera F1 + F2 + F3 (padrões) | (a criar) |
+| F5 | Tela: Dashboard de governança | 🔒 espera F1 + F2 + decisão de charts | (a criar) |
 
 ## Matriz de paralelismo
 
-Tabela vazia até F0 mergear. F0 é base — toca a estrutura raiz do
-repo (package.json, vite.config, tsconfig, etc) e não pode rodar em
-paralelo com nada porque ainda não há nada.
+Tasks 🎯 ⚡ podem rodar em worktrees simultâneas se a matriz abaixo
+permitir. Cada célula explica conflito + resolução.
 
-Depois de F0, o orquestrador discute com Rick o próximo lote e
-constroi a matriz.
+### F1 × F2 (par paralelo atual)
+
+| Arquivo | F1 mexe | F2 mexe | Conflito? |
+|---|---|---|---|
+| `src/api/`, `src/types/` | cria | — | nenhum |
+| `src/components/layout/`, `src/components/ui/` | — | cria | nenhum |
+| `src/lib/utils.ts` (shadcn) | — | cria | nenhum |
+| `src/index.css` | — | cria | nenhum |
+| `src/main.tsx` | + `QueryClientProvider`, MSW startup | + `import "./index.css"` | linhas diferentes, merge trivial |
+| `src/App.tsx` | — | envolve `<Routes>` em `<Layout>` | nenhum |
+| `package.json` | + deps de data | + deps de UI | merge trivial |
+| `package-lock.json` | regenera | regenera | **2º a mergear: rebase + `rm package-lock.json && npm install` + commit do lock** |
+| `tsconfig.app.json` | — | + `paths` pra `@/*` | nenhum |
+| `vite.config.ts` | — | + plugin Tailwind + alias | nenhum |
+| `src/setupTests.ts` | + setup MSW server | (não toca esperado) | nenhum esperado |
+| `README.md` | + seção env vars | + seção styling | merge trivial (seções diferentes) |
+
+**Regra para o 2º a mergear**: rebase + regenerar lockfile + commit
+`chore: regenera lockfile pós-merge F<x>`.
 
 ## Como criar uma task nova
 
@@ -36,7 +58,8 @@ constroi a matriz.
 2. Crie o brief em `docs/tasks/<id>-<slug>.md` seguindo o esqueleto
    abaixo.
 3. Atualize `docs/arvore.md` se aplicável.
-4. Atualize a matriz se a task tocar arquivos compartilhados.
+4. Atualize a matriz se a task tocar arquivos compartilhados com
+   outras 🎯 ⚡.
 
 ### Esqueleto de brief
 

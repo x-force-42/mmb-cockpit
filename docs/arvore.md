@@ -20,24 +20,59 @@ deixando "operação ao vivo" pra v2.
 
 ## Onde estamos
 
-**Bootstrap.** Repo recém-criado, sem scaffold ainda. Próxima task
-é F0 (criar a base Vite+React+TS+Vitest). Depois disso, o
-orquestrador discute com Rick o próximo lote e quebra em tasks
-paralelizáveis.
+**Infra em paralelo.** F0 entregue (scaffold Vite+React+TS+Vitest +
+Biome + react-router rodando em master). Discovery de stack
+fechado em 2026-05-14: TanStack Query, Tailwind, shadcn/ui, MSW,
+feature folders. Próximo par de tasks (F1 + F2) é paralelizável e
+foi rascunhado pronto pra delegar.
 
 ```
-PASSADO          PRESENTE         FUTURO
-                   ●━━━━ ━ ━ ━ ━ ━ →
-                   ↑
-              repo criado
-              scaffold pendente (F0)
+PASSADO              PRESENTE                    FUTURO
+●━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ ━ ━ ━ ━ ━ →
+F0 scaffold ✅        F1 data layer  🎯 ⚡
+                      F2 UI + shell  🎯 ⚡
+                                     F3 Lista de runs
+                                     F4 Detalhe + edição
+                                     F5 Dashboard governança
 ```
+
+## Roadmap concreto
+
+| ID | Foco | Módulos que toca | Depende de |
+|---|---|---|---|
+| F0 ✅ | Scaffold base | repo todo | — |
+| F1 🎯 ⚡ | Camada de dados | `src/api/`, `src/types/` | F0 |
+| F2 🎯 ⚡ | UI tooling + shell | `src/components/layout/`, `src/components/ui/`, `src/index.css` | F0 |
+| F3 | Tela: Lista de runs | `src/features/runs/` | F1 + F2 |
+| F4 | Tela: Detalhe + edição | `src/features/runs/` (compartilha com F3) | F1 + F2 + F3 |
+| F5 | Tela: Dashboard | `src/features/dashboard/` | F1 + F2 (charts: decide na hora) |
+
+## Convenção de modularização
+
+Adotada no discovery 2026-05-14:
+
+```
+src/
+├── features/
+│   ├── runs/          (pages + hooks + components específicos)
+│   └── dashboard/     (idem)
+├── components/
+│   ├── layout/        (Header, Sidebar, Layout — F2)
+│   └── ui/            (shadcn — F2)
+├── api/               (client, queryClient, mocks — F1)
+├── types/             (contrato compartilhado — F1)
+└── lib/               (utils, helpers — shadcn coloca utils.ts aqui)
+```
+
+`features/` permite que duas telas paralelizem sem cruzar paths.
 
 ## Trilhas (a definir)
 
 Trilhas só fazem sentido quando há concorrência real entre frentes.
-Até lá, fica plano: tasks numeradas sequencialmente (F0, F1, F2...).
-O orquestrador introduz trilhas quando ficar útil.
+Até aqui é frente única (frontend do MVP), tasks numeradas
+sequencialmente F0-F5. Quando o MVP fechar e aparecerem v2 features
+(operação ao vivo, multi-projeto B1 ressonando, etc.), o orquestrador
+introduz trilhas.
 
 ## Dependências do ecossistema
 
