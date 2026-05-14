@@ -23,7 +23,7 @@ Legenda: ✅ entregue · 🎯 pronto pra delegar · ⚡ paraleliza · 🔒 bloqu
 | **F0** | Scaffold do projeto Vite+React+TS+Vitest | ✅ entregue | [`F0-scaffold.md`](F0-scaffold.md) |
 | **F1** | Camada de dados — API client + TanStack Query + MSW | ✅ entregue | [`F1-data-layer.md`](F1-data-layer.md) |
 | **F2** | UI tooling + layout shell — Tailwind + shadcn + chrome | ✅ entregue | [`F2-ui-shell.md`](F2-ui-shell.md) |
-| **M1** | Cockpit MVP completo — 3 telas + hotfixes pós-F2 | 🎯 pronto | [`M1-cockpit-mvp.md`](M1-cockpit-mvp.md) |
+| **M1** | Cockpit MVP completo — 3 telas + hotfixes pós-F2 | ✅ entregue | [`M1-cockpit-mvp.md`](M1-cockpit-mvp.md) |
 | ~~F2.1~~ | ~~Hotfixes pós-F2~~ | 🔀 absorvido por M1 | (hotfixes vão na seção 0 do M1) |
 | ~~F3~~ | ~~Tela: Lista de runs~~ | 🔀 absorvido por M1 | — |
 | ~~F4~~ | ~~Tela: Detalhe + edição~~ | 🔀 absorvido por M1 | — |
