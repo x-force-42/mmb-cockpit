@@ -75,20 +75,24 @@ subsequentes, discutidas com o Rick.
 Repo recém-iniciado. Apenas docs + scripts + .gitignore + README.
 Nenhum `package.json` ainda. Esta task é literalmente do zero.
 
-### Decisões recomendadas (não-obrigatórias)
+### Decisões fechadas (não negocie)
 
-São defaults sensatos pra ir mais rápido. Se você tiver razão
-forte pra divergir, alinhe com o Rick antes:
+Alinhadas com o Rick em 2026-05-14:
 
 - **Template Vite**: `react-ts`. Não use SWC se o Vite default for
   Babel — fica como vier.
-- **Linter/formatter**: **Biome** (single tool, sem brigas, rápido).
-  Alternativa aceitável: ESLint + Prettier.
+- **Linter/formatter**: **Biome**. Não usar ESLint+Prettier.
 - **React Router**: v6 (current stable).
 - **Testing Library**: `@testing-library/react` + `@testing-library/jest-dom`
   via Vitest. Configurar jsdom em `vite.config.ts`.
 - **Tsconfig**: `strict: true`. Acompanhe o template, só endurece
   se default vier flexível demais.
+- **Rotas placeholder**: `/` → "Hello cockpit", `/runs` → "em construção".
+  Mantenha exatamente esses paths. Decisão de onde mora a dashboard
+  fica pra task da dashboard, não aqui.
+- **Stack core fechada**: React + Vite + TypeScript + Vitest + Biome
+  + react-router. Nenhuma outra dep de runtime ou tooling entra em
+  F0 — se aparecer "vai precisar", flagga e pergunta.
 
 ### Padrões a seguir
 
@@ -147,5 +151,7 @@ Nada. É a primeira task, repo vazio.
 
 ## Estimativa
 
-~2-4h. Maior parte é configuração de tooling. Implementação de UI
-é minúscula nesta task.
+~2h com IA, máximo. Maior parte é configuração de tooling.
+Implementação de UI é minúscula nesta task. Se estourar muito
+desse teto, é sinal de que você caiu em yak-shaving — pare e
+reporte ao Rick.
