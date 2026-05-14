@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.worktrees/
+.env
+.env.local
+.env.*.local
+
+# editor
+.vscode/
+.idea/
+*.swp
+
+# system
+.DS_Store
+Thumbs.db
+
+# build/test artifacts
+coverage/
+.vite/
+*.log
+npm-debug.log*
