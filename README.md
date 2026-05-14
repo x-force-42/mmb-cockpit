@@ -70,6 +70,17 @@ shell — Tailwind + shadcn) paralelizáveis. Telas (F3-F5) começam
 quando ambos mergearem. Ver `docs/arvore.md` pro roadmap completo
 e `docs/tasks/INDEX.md` pras tasks abertas.
 
+## Styling
+
+- **Tailwind v4** via plugin `@tailwindcss/vite`. Tokens e variáveis
+  CSS ficam em `src/index.css` (escritos pelo shadcn init).
+- **shadcn/ui** (preset Nova, base neutra) pra primitivos. Alias
+  `@/*` resolve `src/*` (configurado em `tsconfig.json` e
+  `vite.config.ts`).
+- Componentes base já instalados: `button`, `card`, `skeleton`,
+  `separator` em `src/components/ui/`.
+- Pra adicionar mais: `npx shadcn@latest add <componente>`.
+
 ## Operação como agente
 
 Este repo segue o mesmo workflow do MMB: orquestrador em master,
