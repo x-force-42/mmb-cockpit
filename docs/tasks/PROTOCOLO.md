@@ -78,10 +78,11 @@ Depois de pré-flight verde:
 | Nome da worktree | `.worktrees/<id>-<slug>` |
 | Nome da branch | `task/<id>-<slug>` |
 | Base da branch | `master` (sempre) |
-| Granularidade de commit | Um conceito atômico por commit. |
+| Granularidade de commit | Um conceito atômico por commit (na branch). |
 | Estilo de commit message | `feat: ...`, `fix: ...`, `refactor: ...`, `test: ...`, `docs: ...`, `chore: ...` |
 | Hooks | Nunca pule (`--no-verify` proibido) |
 | Push | Não pushe sem o Rick aprovar |
+| Merge style | **Squash padrão.** Rick squasha o PR ao mergear — master fica linear, granularidade fica preservada no histórico da branch / PR. Não é problema você commitar muitos passos pequenos: eles viram um commit limpo no master. |
 
 ## Coordenação entre agentes paralelos
 

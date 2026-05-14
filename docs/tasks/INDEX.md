@@ -22,8 +22,9 @@ Legenda: ✅ entregue · 🎯 pronto pra delegar · ⚡ paraleliza · 🔒 bloqu
 |---|---|---|---|
 | **F0** | Scaffold do projeto Vite+React+TS+Vitest | ✅ entregue | [`F0-scaffold.md`](F0-scaffold.md) |
 | **F1** | Camada de dados — API client + TanStack Query + MSW | ✅ entregue | [`F1-data-layer.md`](F1-data-layer.md) |
-| **F2** | UI tooling + layout shell — Tailwind + shadcn + chrome | 🎯 pronto · ⚡ com F1 | [`F2-ui-shell.md`](F2-ui-shell.md) |
-| F3 | Tela: Lista de runs | 🔒 espera F1 + F2 | (a criar) |
+| **F2** | UI tooling + layout shell — Tailwind + shadcn + chrome | ✅ entregue | [`F2-ui-shell.md`](F2-ui-shell.md) |
+| **F2.1** | Hotfixes pós-F2 — vitest scope, shadcn dep, task-end squash | 🎯 pronto | [`F2.1-hotfixes-pos-f2.md`](F2.1-hotfixes-pos-f2.md) |
+| F3 | Tela: Lista de runs | 🔒 espera F2.1 | (a criar) |
 | F4 | Tela: Detalhe de run + edição | 🔒 espera F1 + F2 + F3 (padrões) | (a criar) |
 | F5 | Tela: Dashboard de governança | 🔒 espera F1 + F2 + decisão de charts | (a criar) |
 
@@ -32,7 +33,10 @@ Legenda: ✅ entregue · 🎯 pronto pra delegar · ⚡ paraleliza · 🔒 bloqu
 Tasks 🎯 ⚡ podem rodar em worktrees simultâneas se a matriz abaixo
 permitir. Cada célula explica conflito + resolução.
 
-### F1 × F2 (par paralelo atual)
+Nenhum par paralelo ativo no momento — F2.1 é serial pequeno antes
+de F3.
+
+### F1 × F2 — histórico (ambas ✅ entregues)
 
 | Arquivo | F1 mexe | F2 mexe | Conflito? |
 |---|---|---|---|

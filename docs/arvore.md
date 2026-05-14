@@ -20,20 +20,19 @@ deixando "operação ao vivo" pra v2.
 
 ## Onde estamos
 
-**Infra em paralelo.** F0 entregue (scaffold Vite+React+TS+Vitest +
-Biome + react-router rodando em master). Discovery de stack
-fechado em 2026-05-14: TanStack Query, Tailwind, shadcn/ui, MSW,
-feature folders. Próximo par de tasks (F1 + F2) é paralelizável e
-foi rascunhado pronto pra delegar.
+**Infra entregue, telas próximas.** F0 + F1 + F2 mergeados em
+master. Stack toda decidida (TanStack Query + MSW + Tailwind v4 +
+shadcn/ui preset radix-nova + feature folders). F2.1 (hotfixes
+pequenos pós-F2) é o último passo antes das telas. Depois disso,
+F3 (Lista) começa.
 
 ```
-PASSADO              PRESENTE                    FUTURO
-●━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ ━ ━ ━ ━ ━ →
-F0 scaffold ✅        F1 data layer  🎯 ⚡
-                      F2 UI + shell  🎯 ⚡
-                                     F3 Lista de runs
-                                     F4 Detalhe + edição
-                                     F5 Dashboard governança
+PASSADO                         PRESENTE         FUTURO
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ ━ ━ →
+F0 scaffold ✅                  F2.1 hotfixes 🎯
+F1 data layer ✅                                F3 Lista
+F2 UI + shell ✅                                F4 Detalhe
+                                                F5 Dashboard
 ```
 
 ## Roadmap concreto
@@ -41,11 +40,12 @@ F0 scaffold ✅        F1 data layer  🎯 ⚡
 | ID | Foco | Módulos que toca | Depende de |
 |---|---|---|---|
 | F0 ✅ | Scaffold base | repo todo | — |
-| F1 🎯 ⚡ | Camada de dados | `src/api/`, `src/types/` | F0 |
-| F2 🎯 ⚡ | UI tooling + shell | `src/components/layout/`, `src/components/ui/`, `src/index.css` | F0 |
-| F3 | Tela: Lista de runs | `src/features/runs/` | F1 + F2 |
-| F4 | Tela: Detalhe + edição | `src/features/runs/` (compartilha com F3) | F1 + F2 + F3 |
-| F5 | Tela: Dashboard | `src/features/dashboard/` | F1 + F2 (charts: decide na hora) |
+| F1 ✅ | Camada de dados | `src/api/`, `src/types/` | F0 |
+| F2 ✅ | UI tooling + shell | `src/components/layout/`, `src/components/ui/`, `src/index.css` | F0 |
+| F2.1 🎯 | Hotfixes (vitest, shadcn dep, task-end) | `vite.config.ts`, `package.json`, `scripts/task-end.sh` | F1 + F2 |
+| F3 | Tela: Lista de runs | `src/features/runs/` | F2.1 |
+| F4 | Tela: Detalhe + edição | `src/features/runs/` (compartilha com F3) | F3 (padrões) |
+| F5 | Tela: Dashboard | `src/features/dashboard/` | F2.1 (charts: decide na hora) |
 
 ## Convenção de modularização
 

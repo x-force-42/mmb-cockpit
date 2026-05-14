@@ -5,6 +5,49 @@ Mais recente no topo.
 
 ---
 
+## 2026-05-14 — F1 + F2 entregues; F2.1 (hotfixes) destrancado
+
+Par paralelo F1 (camada de dados) + F2 (UI tooling + shell) executado
+com sucesso em worktrees simultâneas. F1 mergeado primeiro (7 commits
+granulares fast-forward), F2 fez rebase + regenerou lockfile +
+mergeou via **squash** (decisão de Rick — codificada agora no
+PROTOCOLO como padrão).
+
+Resultado: typecheck zero, lint clean (38 arquivos), build 291kb
+(92kb gzip), 10 testes (todos verdes — mas vitest captura
+`.worktrees/`, ver F2.1).
+
+Veredito por entrega:
+
+- **F1**: forte. Types completos, ApiError tipado, query keys
+  factory, MSW handlers com estado mutável + reset. 1 ressalva
+  pequena: fixtures não cobrem `garagem_error` terminal_phase
+  (F5 vai testar phase_breakdown — fica na lista).
+- **F2**: bom, com decisões silenciosas. Layout/Header/Sidebar
+  limpos com tokens shadcn. Preset escolhido foi `radix-nova` (não
+  o default) + base `neutral` (não `slate` do brief). Trouxe junto
+  `@fontsource-variable/geist` e `tw-animate-css` sem pedir. Tudo
+  funciona, mas é decisão que o brief de F2 não previa. Aceitamos
+  o preset como fato consumado (README já reflete).
+
+Issues identificados → viram **F2.1**:
+- Vitest pega `.worktrees/**` (testes duplicados em runtime).
+- `shadcn` CLI foi parar em `dependencies` (deveria ser dev).
+- `task-end.sh` falha em squash merge (`merge-base --is-ancestor`
+  não detecta squash). Explica por que worktree F2 não foi limpa.
+
+Decisões consolidadas nesta rodada:
+
+- **Merge style**: squash padrão. PROTOCOLO atualizado pra refletir.
+  Granularidade fica no PR, master fica linear.
+- **Hotfixes pequenos pós-task** viram brief micro próprio (F2.1
+  como precedente), não enxertados na próxima task.
+
+Próximo passo: rodar F2.1 (~15-20min), depois F3 (Lista de runs)
+fica destrancada.
+
+---
+
 ## 2026-05-14 — F0 entregue + discovery de stack fechado
 
 Scaffold inicial mergeado (commits `4239e93`, `9b329a0`, `9ddfe7c`).
