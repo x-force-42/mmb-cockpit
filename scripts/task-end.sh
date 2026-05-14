@@ -31,11 +31,15 @@ if ! git show-ref --verify --quiet "refs/heads/$BRANCH"; then
   echo "Branch $BRANCH não existe. Nada a limpar."
 fi
 
-# Confere mergeada
+# Confere mergeada (FF ou squash)
 if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
-  if ! git merge-base --is-ancestor "$BRANCH" master; then
+  if git merge-base --is-ancestor "$BRANCH" master; then
+    : # mergeada via FF/merge tradicional
+  elif [ -z "$(git cherry master "$BRANCH" | grep '^\+' || true)" ]; then
+    : # mergeada via squash
+  else
     echo "ERRO: branch $BRANCH não está mergeada em master."
-    echo "Mergeie o PR primeiro, ou use destrutivo manualmente:"
+    echo "Mergeie o PR primeiro, ou destrutivo manualmente:"
     echo "  git worktree remove --force $WORKTREE_PATH"
     echo "  git branch -D $BRANCH"
     exit 1
@@ -48,7 +52,7 @@ if [ -d "$WORKTREE_PATH" ]; then
 fi
 
 if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
-  git branch -d "$BRANCH"
+  git branch -D "$BRANCH"
   echo "✓ Branch apagada: $BRANCH"
 fi
 
