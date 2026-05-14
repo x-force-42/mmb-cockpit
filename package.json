@@ -15,6 +15,7 @@
     "lint:fix": "biome check --write ."
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.100.10",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.10.0"
@@ -28,8 +29,14 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
+    "msw": "^2.14.6",
     "typescript": "~6.0.2",
     "vite": "^6.4.2",
     "vitest": "^3.2.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
