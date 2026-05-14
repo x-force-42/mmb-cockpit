@@ -20,20 +20,21 @@ deixando "operação ao vivo" pra v2.
 
 ## Onde estamos
 
-**Modo velocidade: MVP empacotado.** F0 + F1 + F2 mergeados. F2.1
-(hotfixes) + F3 (Lista) + F4 (Detalhe) + F5 (Dashboard) **foram
-consolidados na task M1 — cockpit MVP completo**, agora ativa.
-Em vez de 4 tasks sequenciais com overhead de orquestração,
-um único agente entrega o MVP ponta-a-ponta. Decisões adicionais
-fechadas no brief: react-hook-form + zod (forms), recharts (charts),
-sonner (toast).
+**MVP em master.** F0 + F1 + F2 + M1 todos entregues. Cockpit está
+funcional ponta-a-ponta: dashboard de governança, lista de runs
+com filtros/paginação/ordenação, detalhe com edição de review via
+form RHF+zod, toast feedback. Roda sem MMB local (MSW intercepta).
+Próximo marco: alinhar o que vem depois — pode ser polish, conectar
+ao MMB real quando E1 mergear, refinos de UX descobertos no uso,
+ou tasks v2 (catálogo de projetos, comparativo de modelos).
 
 ```
-PASSADO                                  PRESENTE          FUTURO
-●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ ━ →
-F0 scaffold ✅                           M1 cockpit MVP 🎯
-F1 data layer ✅                          (3 telas + hotfixes)
-F2 UI + shell ✅                                            v2 (a discutir)
+PASSADO                                          PRESENTE       FUTURO
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━●━━━━ ━ ━ →
+F0 scaffold ✅                                                v2 (a discutir)
+F1 data layer ✅                                              - conectar MMB real
+F2 UI + shell ✅                                              - refinos UX
+M1 cockpit MVP ✅                                             - telas v2 (B1/B2/B3)
 ```
 
 ## Roadmap concreto
@@ -43,7 +44,7 @@ F2 UI + shell ✅                                            v2 (a discutir)
 | F0 ✅ | Scaffold base | repo todo | — |
 | F1 ✅ | Camada de dados | `src/api/`, `src/types/` | F0 |
 | F2 ✅ | UI tooling + shell | `src/components/layout/`, `src/components/ui/`, `src/index.css` | F0 |
-| **M1** 🎯 | **Cockpit MVP completo** (3 telas + hotfixes) | `src/features/{runs,dashboard}/`, `vite.config.ts`, `scripts/task-end.sh`, etc. | F1 + F2 |
+| **M1 ✅** | **Cockpit MVP completo** (3 telas + hotfixes) | `src/features/{runs,dashboard}/`, `vite.config.ts`, `scripts/task-end.sh`, etc. | F1 + F2 |
 | ~~F2.1, F3, F4, F5~~ | ~~granular~~ | 🔀 absorvido por M1 | — |
 
 ## Pós-MVP (a discutir após M1 mergear)

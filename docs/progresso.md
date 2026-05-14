@@ -5,6 +5,69 @@ Mais recente no topo.
 
 ---
 
+## 2026-05-14 — M1 entregue: cockpit MVP funcional ponta-a-ponta
+
+Aposta da consolidação compensou. M1 mergeada como squash único
+(`4067c0b feat(M1): cockpit MVP completo — 3 telas + hotfixes pós-F2`),
+worktree limpa, 20 testes verdes, typecheck zero, lint clean (65
+arquivos), build 939kb (286kb gzip — abaixo do critério do brief).
+
+Resultado: SPA com 3 rotas funcionais (`/`, `/runs`, `/runs/:id`),
+toast com sonner integrado no Layout, formatadores pt-BR em
+`src/lib/format.ts`, schema zod do review reutilizável. Dev server
+sobe em ~700ms, MSW intercepta com fixtures — roda 100% local sem
+MMB ligado.
+
+Veredito por entrega:
+
+- **Hotfix 0.1 (vitest exclude .worktrees/)**: ✅ funciona — 10
+  arquivos de teste, nenhuma duplicação com worktree montada.
+- **Hotfix 0.2 (shadcn em devDependencies)**: ✅ feito.
+- **Hotfix 0.3 (task-end.sh squash)**: ⚠️ entregue mas precisou
+  follow-up do Rick (`ae7ecf2`). Minha sugestão original de
+  `git cherry master $BRANCH | grep ^+` não detecta squash N→1
+  porque cada commit individual da branch fica sem patch-id
+  equivalente em master. Rick descobriu durante cleanup do próprio
+  M1 e corrigiu com truque de `commit-tree` hipotético (cria commit
+  "squash candidate" e pergunta ao cherry). **Aprendizado**: brief
+  com solução técnica não-trivial precisa de validação antes —
+  sugerir aproximação, não receita.
+- **Dashboard**: 4 KPIs + 2 charts (recharts BarChart + LineChart)
+  + PhaseBreakdown. Picker de janela 7/30/90 dias. 4 estados
+  (loading/error/empty/success) cobertos.
+- **Lista**: tabela shadcn com filtros (project, phase, datas),
+  ordenação por data (toggle desc↔asc), paginação manual via
+  componente próprio. Linha clicável → detalhe.
+- **Detalhe**: breadcrumb + metadata + form RHF+zod + briefing
+  pretty-print + commits. Form usa `Controller` (não `register`),
+  defaultValues inicializam do detail, dirty state mostrado.
+- **Testes**: 20 testes (10 files), cobrem caminho crítico
+  incluindo submit do form com toast verificado.
+
+Surpresas silenciosas (decisões não pedidas):
+
+- **`next-themes ^0.4.6`** instalado — provavelmente trazido pelo
+  `shadcn add sonner`. Não invasivo, ~10kb gzip. Aceita.
+- **Bundle 939kb (286kb gzip)** — passou do warn vite de 500kb mas
+  abaixo do critério do brief. Maior contribuidor: recharts. Vale
+  considerar code-splitting via dynamic import nas rotas em v2,
+  não é urgente.
+
+Débitos pequenos que ficaram (não bloqueiam, anota pra v2):
+
+- `Outcome` em `types/api.ts` ainda tem `| string` que colapsa o
+  union (autocomplete trick conhecido). Aceito.
+- Fixtures não cobrem `terminal_phase: garagem_error` — Dashboard
+  renderiza correto mesmo assim (phase_breakdown é Partial).
+- Stderr no test do Dashboard: recharts reclama de width/height
+  -1 em jsdom. Testes passam — é normal, não bug.
+
+Próximo passo: alinhar com Rick o pós-MVP. Opções no radar:
+conectar à API real do MMB quando E1 mergear lá, refinos de UX
+após uso real, ou esperar B1/B2/B3 destrancarem telas v2.
+
+---
+
 ## 2026-05-14 — Consolidação: M1 (cockpit MVP completo) substitui F2.1+F3+F4+F5
 
 Decisão estratégica do Rick: trocar velocidade por granularidade.
