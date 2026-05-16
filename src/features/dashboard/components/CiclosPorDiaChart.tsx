@@ -1,32 +1,32 @@
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDate, formatUSD } from "@/lib/format";
-import type { DiaCusto } from "@/types/api";
+import { formatDate } from "@/lib/format";
+import type { DiaCiclos } from "@/types/api";
 
 interface Props {
-  data: DiaCusto[];
+  data: DiaCiclos[];
 }
 
-export function CustoPorDiaChart({ data }: Props) {
+export function CiclosPorDiaChart({ data }: Props) {
   const sorted = [...data].sort((a, b) => a.dia.localeCompare(b.dia));
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium">Custo por dia</CardTitle>
+        <CardTitle className="text-sm font-medium">Ciclos por dia</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
+            <BarChart
               data={sorted}
               margin={{ top: 4, right: 8, bottom: 4, left: 0 }}
             >
@@ -39,30 +39,22 @@ export function CustoPorDiaChart({ data }: Props) {
                 className="text-muted-foreground"
               />
               <YAxis
-                tickFormatter={(v) => formatUSD(Number(v))}
+                allowDecimals={false}
                 fontSize={11}
-                width={80}
                 stroke="currentColor"
                 className="text-muted-foreground"
               />
               <Tooltip
                 labelFormatter={(label) => formatDate(String(label))}
-                formatter={(value) => [formatUSD(Number(value)), "Custo"]}
+                formatter={(value) => [Number(value), "Ciclos"]}
                 contentStyle={{
                   fontSize: 12,
                   borderRadius: 8,
                   border: "1px solid hsl(var(--border))",
                 }}
               />
-              <Line
-                type="monotone"
-                dataKey="usd"
-                stroke="hsl(160 84% 39%)"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 5 }}
-              />
-            </LineChart>
+              <Bar dataKey="n" fill="hsl(217 91% 60%)" radius={[4, 4, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
