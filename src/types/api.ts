@@ -37,7 +37,14 @@ export type CicloStatus =
   | "completo"
   | "abortado";
 
-export type AbortOrigin = "heartbeat" | "manual" | "self" | "master";
+export type AbortOrigin =
+  | "heartbeat"
+  | "manual"
+  | "self"
+  | "master"
+  | "worker-exit"
+  | "worker-timeout"
+  | "stale";
 
 export type MergedToMain = 0 | 1 | null;
 export type AssertivenessScore = 1 | 2 | 3 | 4 | 5 | null;
@@ -91,7 +98,8 @@ export type EventoSeverity = "info" | "warn" | "error" | "critical";
 
 export interface Evento {
   id: number;
-  ciclo_id: string;
+  /** NULL para eventos órfãos (sem ciclo casado pela heurística do reconciler). */
+  ciclo_id: string | null;
   ts: string;
   kind: EventoKind;
   severity: EventoSeverity | null;
