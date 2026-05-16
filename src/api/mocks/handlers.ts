@@ -67,6 +67,7 @@ function toCicloListItem(c: CicloDetail): Ciclo {
     cost_usd,
     abort_origin,
     abort_reason,
+    andaime_version,
   } = c;
   return {
     id,
@@ -84,6 +85,7 @@ function toCicloListItem(c: CicloDetail): Ciclo {
     cost_usd,
     abort_origin,
     abort_reason,
+    andaime_version,
   };
 }
 
