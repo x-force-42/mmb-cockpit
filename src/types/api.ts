@@ -171,6 +171,13 @@ export interface ProjetosListResponse {
   items: Projeto[];
 }
 
+// ─── andaime versions ──────────────────────────────────────────────────
+
+export interface AndaimeVersionsResponse {
+  /** Lista das versões distintas presentes no DB, ordenadas da mais recente pra mais antiga. */
+  items: string[];
+}
+
 // ─── métricas ──────────────────────────────────────────────────────────
 
 export interface DiaCusto {
