@@ -1,11 +1,11 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { useProjects } from "./projects";
+import { useProjetos } from "./projetos";
 import { createWrapper } from "./test-utils";
 
-describe("useProjects", () => {
+describe("useProjetos", () => {
   it("devolve a lista de projetos", async () => {
-    const { result } = renderHook(() => useProjects(), {
+    const { result } = renderHook(() => useProjetos(), {
       wrapper: createWrapper(),
     });
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
