@@ -36,6 +36,32 @@ describe("useCiclos", () => {
     expect(items.length).toBeGreaterThan(0);
     expect(items.every((c) => c.abort_origin === "heartbeat")).toBe(true);
   });
+
+  it("filtra por andaime_version simples", async () => {
+    const { result } = renderHook(
+      () => useCiclos({ andaime_version: ["v0.5.0"] }),
+      { wrapper: createWrapper() },
+    );
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    const items = result.current.data?.items ?? [];
+    expect(items.length).toBeGreaterThan(0);
+    expect(items.every((c) => c.andaime_version === "v0.5.0")).toBe(true);
+  });
+
+  it("multiselect de andaime_version aplica union", async () => {
+    const { result } = renderHook(
+      () => useCiclos({ andaime_version: ["v0.5.0", "v0.4.0"] }),
+      { wrapper: createWrapper() },
+    );
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    const items = result.current.data?.items ?? [];
+    expect(items.length).toBeGreaterThan(0);
+    expect(
+      items.every((c) =>
+        ["v0.5.0", "v0.4.0"].includes(c.andaime_version ?? ""),
+      ),
+    ).toBe(true);
+  });
 });
 
 describe("useCiclo", () => {

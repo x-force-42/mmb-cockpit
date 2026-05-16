@@ -114,6 +114,7 @@ export const handlers = [
     const status = url.searchParams.get("status");
     const from = url.searchParams.get("from");
     const to = url.searchParams.get("to");
+    const andaimeVersions = url.searchParams.getAll("andaime_version");
     const limit = Math.min(Number(url.searchParams.get("limit") ?? 50), 200);
     const offset = Math.max(Number(url.searchParams.get("offset") ?? 0), 0);
 
@@ -129,6 +130,13 @@ export const handlers = [
     if (from)
       filtered = filtered.filter((e) => e.started_at.slice(0, 10) >= from);
     if (to) filtered = filtered.filter((e) => e.started_at.slice(0, 10) <= to);
+    if (andaimeVersions.length > 0) {
+      filtered = filtered.filter((e) =>
+        e.andaime_version != null
+          ? andaimeVersions.includes(e.andaime_version)
+          : false,
+      );
+    }
 
     filtered.sort((a, b) => b.started_at.localeCompare(a.started_at));
 
@@ -164,6 +172,7 @@ export const handlers = [
     const abortOrigin = url.searchParams.get("abort_origin");
     const from = url.searchParams.get("from");
     const to = url.searchParams.get("to");
+    const andaimeVersions = url.searchParams.getAll("andaime_version");
     const limit = Math.min(Number(url.searchParams.get("limit") ?? 50), 200);
     const offset = Math.max(Number(url.searchParams.get("offset") ?? 0), 0);
     const order = url.searchParams.get("order") ?? "planner_invoked_at:desc";
@@ -209,6 +218,13 @@ export const handlers = [
     if (to) {
       filtered = filtered.filter(
         (c) => c.planner_invoked_at.slice(0, 10) <= to,
+      );
+    }
+    if (andaimeVersions.length > 0) {
+      filtered = filtered.filter((c) =>
+        c.andaime_version != null
+          ? andaimeVersions.includes(c.andaime_version)
+          : false,
       );
     }
 

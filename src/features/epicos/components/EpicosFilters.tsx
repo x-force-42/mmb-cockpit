@@ -1,3 +1,4 @@
+import { AndaimeVersionFilter } from "@/components/AndaimeVersionFilter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -78,6 +79,14 @@ export function EpicosFilters({ filters, onChange, onClear }: Props) {
           onChange={(e) => update({ to: e.target.value || undefined })}
         />
       </div>
+
+      <AndaimeVersionFilter
+        idPrefix="filter-epico-andaime"
+        selected={filters.andaime_version ?? []}
+        onChange={(next) =>
+          update({ andaime_version: next.length > 0 ? next : undefined })
+        }
+      />
 
       <Button variant="outline" onClick={onClear} className="ml-auto">
         Limpar filtros

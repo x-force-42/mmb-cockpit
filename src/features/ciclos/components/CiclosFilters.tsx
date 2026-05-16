@@ -1,5 +1,6 @@
 import { useEpicos } from "@/api/queries/epicos";
 import { useProjetos } from "@/api/queries/projetos";
+import { AndaimeVersionFilter } from "@/components/AndaimeVersionFilter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -172,6 +173,14 @@ export function CiclosFilters({ filters, onChange, onClear }: Props) {
           onChange={(e) => update({ to: e.target.value || undefined })}
         />
       </div>
+
+      <AndaimeVersionFilter
+        idPrefix="filter-ciclo-andaime"
+        selected={filters.andaime_version ?? []}
+        onChange={(next) =>
+          update({ andaime_version: next.length > 0 ? next : undefined })
+        }
+      />
 
       <Button variant="outline" onClick={onClear} className="ml-auto">
         Limpar filtros

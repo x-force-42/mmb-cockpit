@@ -119,6 +119,7 @@ export interface EpicosListQuery {
   status?: EpicoStatus;
   from?: string;
   to?: string;
+  andaime_version?: string[];
   limit?: number;
   offset?: number;
 }
@@ -143,6 +144,7 @@ export interface CiclosListQuery {
   abort_origin?: AbortOrigin;
   from?: string;
   to?: string;
+  andaime_version?: string[];
   limit?: number;
   offset?: number;
   order?: CiclosListOrder;
