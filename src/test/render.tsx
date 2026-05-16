@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type RenderOptions, render } from "@testing-library/react";
+import { ThemeProvider } from "next-themes";
 import type { ReactElement } from "react";
 import { MemoryRouter } from "react-router-dom";
 
@@ -13,9 +14,18 @@ export function renderWithProviders(
   });
   return render(ui, {
     wrapper: ({ children }) => (
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-      </QueryClientProvider>
+      <ThemeProvider
+        attribute="data-theme"
+        defaultTheme="light"
+        enableSystem={false}
+        storageKey="mmb-theme-test"
+      >
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter initialEntries={initialEntries}>
+            {children}
+          </MemoryRouter>
+        </QueryClientProvider>
+      </ThemeProvider>
     ),
     ...rest,
   });

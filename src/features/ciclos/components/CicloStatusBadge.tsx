@@ -26,16 +26,14 @@ const STATUS_ICON: Record<CicloStatus, LucideIcon> = {
   abortado: CircleX,
 };
 
-// Variants do shadcn não comportam todos os tons; aplico classes
-// Tailwind explícitas (mesmo pattern do antigo PhaseBadge).
 const STATUS_CLASS: Record<CicloStatus, string> = {
   iniciado: "",
   planejado:
-    "border-transparent bg-sky-100 text-sky-900 dark:bg-sky-900/40 dark:text-sky-200",
+    "border-transparent bg-status-active text-status-active-foreground",
   pr_aberto:
-    "border-transparent bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-200",
+    "border-transparent bg-status-warning text-status-warning-foreground",
   completo:
-    "border-transparent bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200",
+    "border-transparent bg-status-success text-status-success-foreground",
   abortado: "border-transparent bg-destructive text-white",
 };
 

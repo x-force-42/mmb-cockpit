@@ -27,25 +27,25 @@ export function KpiCards({ data }: Props) {
       label: "Total ciclos",
       value: formatNumber(data.ciclos_total),
       icon: Activity,
-      accent: "text-sky-600 dark:text-sky-400",
+      accent: "text-kpi-ciclos",
     },
     {
       label: "Épicos",
       value: formatNumber(data.epicos_total),
       icon: Target,
-      accent: "text-violet-600 dark:text-violet-400",
+      accent: "text-kpi-epicos",
     },
     {
       label: "Custo total",
       value: formatUSD(data.custo_total_usd),
       icon: CircleDollarSign,
-      accent: "text-emerald-600 dark:text-emerald-400",
+      accent: "text-kpi-custo",
     },
     {
       label: "Taxa de abort",
       value: formatPercent(data.taxa_abort),
       icon: TrendingDown,
-      accent: "text-rose-600 dark:text-rose-400",
+      accent: "text-kpi-abort",
     },
   ];
 

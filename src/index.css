@@ -3,7 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
     --font-heading: var(--font-sans);
@@ -46,6 +46,16 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
+    --color-status-active: var(--status-active);
+    --color-status-active-foreground: var(--status-active-foreground);
+    --color-status-warning: var(--status-warning);
+    --color-status-warning-foreground: var(--status-warning-foreground);
+    --color-status-success: var(--status-success);
+    --color-status-success-foreground: var(--status-success-foreground);
+    --color-kpi-ciclos: var(--kpi-ciclos);
+    --color-kpi-epicos: var(--kpi-epicos);
+    --color-kpi-custo: var(--kpi-custo);
+    --color-kpi-abort: var(--kpi-abort);
 }
 
 :root {
@@ -81,9 +91,19 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --status-active: oklch(0.951 0.026 237);
+    --status-active-foreground: oklch(0.309 0.115 250);
+    --status-warning: oklch(0.973 0.050 89);
+    --status-warning-foreground: oklch(0.327 0.101 54);
+    --status-success: oklch(0.951 0.060 162);
+    --status-success-foreground: oklch(0.276 0.073 171);
+    --kpi-ciclos: oklch(0.515 0.193 240);
+    --kpi-epicos: oklch(0.491 0.253 286);
+    --kpi-custo: oklch(0.545 0.150 163);
+    --kpi-abort: oklch(0.541 0.232 15);
 }
 
-.dark {
+[data-theme="dark"] {
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.205 0 0);
@@ -115,6 +135,16 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+    --status-active: oklch(0.293 0.113 250 / 40%);
+    --status-active-foreground: oklch(0.900 0.058 241);
+    --status-warning: oklch(0.327 0.101 54 / 40%);
+    --status-warning-foreground: oklch(0.942 0.095 92);
+    --status-success: oklch(0.276 0.073 171 / 40%);
+    --status-success-foreground: oklch(0.907 0.099 162);
+    --kpi-ciclos: oklch(0.762 0.130 230);
+    --kpi-epicos: oklch(0.729 0.170 285);
+    --kpi-custo: oklch(0.791 0.130 163);
+    --kpi-abort: oklch(0.760 0.181 14);
 }
 
 @layer base {
