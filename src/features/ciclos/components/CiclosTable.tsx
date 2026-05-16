@@ -73,10 +73,10 @@ export function CiclosTable({
 
   return (
     <TooltipProvider>
-      <div className="overflow-hidden rounded-md border bg-background">
+      <div className="overflow-hidden rounded-md border bg-background shadow-xs">
         <Table>
-          <TableHeader>
-            <TableRow>
+          <TableHeader className="sticky top-0 z-10 bg-muted/60 backdrop-blur-sm">
+            <TableRow className="hover:bg-transparent">
               <TableHead className="w-44">
                 {sortable ? (
                   <button
@@ -113,7 +113,9 @@ export function CiclosTable({
                 <TableRow
                   key={c.id}
                   onClick={() => navigate(`/ciclos/${c.id}`)}
-                  className={cn("cursor-pointer")}
+                  className={cn(
+                    "cursor-pointer odd:bg-muted/20 hover:bg-muted",
+                  )}
                 >
                   <TableCell className="font-mono text-xs tabular-nums">
                     {formatDateTime(c.planner_invoked_at)}

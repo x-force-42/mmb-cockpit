@@ -30,10 +30,10 @@ export function EpicosTable({ epicos }: Props) {
   const navigate = useNavigate();
   return (
     <TooltipProvider>
-      <div className="overflow-hidden rounded-md border bg-background">
+      <div className="overflow-hidden rounded-md border bg-background shadow-xs">
         <Table>
-          <TableHeader>
-            <TableRow>
+          <TableHeader className="sticky top-0 z-10 bg-muted/60 backdrop-blur-sm">
+            <TableRow className="hover:bg-transparent">
               <TableHead className="w-56">Slug</TableHead>
               <TableHead>Intenção</TableHead>
               <TableHead className="w-28">Status</TableHead>
@@ -46,7 +46,7 @@ export function EpicosTable({ epicos }: Props) {
               <TableRow
                 key={e.id}
                 onClick={() => navigate(`/epicos/${e.id}`)}
-                className={cn("cursor-pointer")}
+                className={cn("cursor-pointer odd:bg-muted/20 hover:bg-muted")}
               >
                 <TableCell className="text-sm font-medium">{e.slug}</TableCell>
                 <TableCell className="text-sm">
