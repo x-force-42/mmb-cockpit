@@ -61,6 +61,9 @@ const ABORT_ORIGIN_LABEL: Record<AbortOrigin, string> = {
   manual: "Manual (Rick)",
   self: "Auto-abortado",
   master: "Master cancelou",
+  "worker-exit": "Worker exit não-zero",
+  "worker-timeout": "Worker timeout",
+  stale: "Stale (sem atividade)",
 };
 
 const EVENTO_KIND_LABEL: Record<EventoKind, string> = {
