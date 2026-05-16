@@ -9,19 +9,19 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/format";
-import type { DailyRuns } from "@/types/api";
+import type { DiaCiclos } from "@/types/api";
 
 interface Props {
-  data: DailyRuns[];
+  data: DiaCiclos[];
 }
 
-export function RunsPorDiaChart({ data }: Props) {
+export function CiclosPorDiaChart({ data }: Props) {
   const sorted = [...data].sort((a, b) => a.dia.localeCompare(b.dia));
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium">Runs por dia</CardTitle>
+        <CardTitle className="text-sm font-medium">Ciclos por dia</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-64">
@@ -46,7 +46,7 @@ export function RunsPorDiaChart({ data }: Props) {
               />
               <Tooltip
                 labelFormatter={(label) => formatDate(String(label))}
-                formatter={(value) => [Number(value), "Runs"]}
+                formatter={(value) => [Number(value), "Ciclos"]}
                 contentStyle={{
                   fontSize: 12,
                   borderRadius: 8,

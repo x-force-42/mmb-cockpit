@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMetricsOverview } from "@/api/queries/metrics";
+import { useMetricasOverview } from "@/api/queries/metricas";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,17 +16,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AbortBreakdown } from "../components/AbortBreakdown";
+import { CiclosPorDiaChart } from "../components/CiclosPorDiaChart";
 import { CustoPorDiaChart } from "../components/CustoPorDiaChart";
 import { KpiCards } from "../components/KpiCards";
-import { PhaseBreakdown } from "../components/PhaseBreakdown";
-import { RunsPorDiaChart } from "../components/RunsPorDiaChart";
+import { StatusBreakdown } from "../components/StatusBreakdown";
 
 const WINDOW_OPTIONS = [7, 30, 90] as const;
 type WindowDays = (typeof WINDOW_OPTIONS)[number];
 
 export function DashboardPage() {
   const [windowDays, setWindowDays] = useState<WindowDays>(30);
-  const query = useMetricsOverview(windowDays);
+  const query = useMetricasOverview(windowDays);
 
   return (
     <div className="flex flex-col gap-4">
@@ -34,7 +35,7 @@ export function DashboardPage() {
         <div>
           <h1 className="text-xl font-semibold">Dashboard</h1>
           <p className="text-sm text-muted-foreground">
-            Visão consolidada das últimas runs do MMB.
+            Visão consolidada dos ciclos do andaime.
           </p>
         </div>
         <Select
@@ -58,16 +59,17 @@ export function DashboardPage() {
         <DashboardSkeleton />
       ) : query.isError ? (
         <DashboardError onRetry={() => query.refetch()} />
-      ) : query.data && query.data.runs_total === 0 ? (
+      ) : query.data && query.data.ciclos_total === 0 ? (
         <DashboardEmpty />
       ) : query.data ? (
         <div className="flex flex-col gap-4">
           <KpiCards data={query.data} />
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <RunsPorDiaChart data={query.data.runs_por_dia} />
+            <CiclosPorDiaChart data={query.data.ciclos_por_dia} />
             <CustoPorDiaChart data={query.data.custo_por_dia} />
           </div>
-          <PhaseBreakdown data={query.data.phase_breakdown} />
+          <StatusBreakdown data={query.data.status_breakdown} />
+          <AbortBreakdown data={query.data.abort_breakdown} />
         </div>
       ) : null}
     </div>
@@ -97,7 +99,7 @@ function DashboardError({ onRetry }: { onRetry: () => void }) {
       <CardHeader>
         <CardTitle>Não consegui carregar as métricas</CardTitle>
         <CardDescription>
-          A API do MMB pode estar fora do ar ou inacessível.
+          A API do mmb-logger pode estar fora do ar ou inacessível.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -111,10 +113,10 @@ function DashboardEmpty() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sem dados ainda</CardTitle>
+        <CardTitle>Sem ciclos ainda</CardTitle>
         <CardDescription>
-          Nenhuma run registrada na janela selecionada. Aumente o período ou
-          rode alguma task no MMB.
+          Nenhum ciclo na janela selecionada. Aumente o período ou aguarde
+          o master invocar um planner.
         </CardDescription>
       </CardHeader>
     </Card>

@@ -1,14 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  formatDuration,
-  formatNumber,
-  formatPercent,
-  formatUSD,
-} from "@/lib/format";
-import type { MetricsOverview } from "@/types/api";
+import { formatNumber, formatPercent, formatUSD } from "@/lib/format";
+import type { MetricasOverview } from "@/types/api";
 
 interface Props {
-  data: MetricsOverview;
+  data: MetricasOverview;
 }
 
 interface Kpi {
@@ -18,10 +13,10 @@ interface Kpi {
 
 export function KpiCards({ data }: Props) {
   const kpis: Kpi[] = [
-    { label: "Total de runs", value: formatNumber(data.runs_total) },
+    { label: "Total ciclos", value: formatNumber(data.ciclos_total) },
+    { label: "Épicos", value: formatNumber(data.epicos_total) },
     { label: "Custo total", value: formatUSD(data.custo_total_usd) },
-    { label: "Tempo médio", value: formatDuration(data.tempo_medio_s) },
-    { label: "Taxa de pushback", value: formatPercent(data.taxa_pushback) },
+    { label: "Taxa de abort", value: formatPercent(data.taxa_abort) },
   ];
 
   return (
