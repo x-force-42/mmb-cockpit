@@ -1,3 +1,4 @@
+import { Inbox, RefreshCw, ServerCrash } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useCiclos } from "@/api/queries/ciclos";
 import { useEpicos } from "@/api/queries/epicos";
@@ -60,7 +61,7 @@ export function CiclosListPage() {
       />
 
       {query.isLoading ? (
-        <Skeleton className="h-96" />
+        <TableLoadingSkeleton />
       ) : query.isError ? (
         <CiclosError onRetry={() => query.refetch()} />
       ) : query.data && query.data.items.length === 0 ? (
@@ -86,17 +87,39 @@ export function CiclosListPage() {
   );
 }
 
+function TableLoadingSkeleton() {
+  return (
+    <div
+      role="status"
+      aria-label="Carregando ciclos"
+      className="flex flex-col gap-2 rounded-md border bg-background p-3"
+    >
+      <Skeleton className="h-9 w-full" />
+      {Array.from({ length: 6 }).map((_, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: skeleton rows são intercambiáveis
+        <Skeleton key={i} className="h-10 w-full" />
+      ))}
+    </div>
+  );
+}
+
 function CiclosError({ onRetry }: { onRetry: () => void }) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Não consegui carregar os ciclos</CardTitle>
-        <CardDescription>
-          A API do mmb-logger pode estar fora do ar ou inacessível.
-        </CardDescription>
+      <CardHeader className="flex flex-row items-start gap-3 space-y-0">
+        <ServerCrash className="size-5 shrink-0 text-destructive" aria-hidden />
+        <div className="flex flex-col gap-1">
+          <CardTitle>Não consegui carregar os ciclos</CardTitle>
+          <CardDescription>
+            A API do mmb-logger pode estar fora do ar ou inacessível.
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
-        <Button onClick={onRetry}>Tentar de novo</Button>
+        <Button onClick={onRetry}>
+          <RefreshCw className="size-4" aria-hidden />
+          Tentar novamente
+        </Button>
       </CardContent>
     </Card>
   );
@@ -105,12 +128,18 @@ function CiclosError({ onRetry }: { onRetry: () => void }) {
 function CiclosEmpty() {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Nenhum ciclo encontrado</CardTitle>
-        <CardDescription>
+      <CardContent className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+        <div
+          aria-hidden
+          className="flex size-14 items-center justify-center rounded-full bg-muted text-muted-foreground"
+        >
+          <Inbox className="size-7" />
+        </div>
+        <CardTitle className="text-base">Nenhum ciclo encontrado</CardTitle>
+        <CardDescription className="max-w-sm">
           Limpe os filtros ou aguarde o master invocar um planner.
         </CardDescription>
-      </CardHeader>
+      </CardContent>
     </Card>
   );
 }
