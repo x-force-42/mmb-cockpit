@@ -323,6 +323,22 @@ export const handlers = [
   // ─── projetos ───────────────────────────────────────────────────────
   http.get("*/api/projetos", () => HttpResponse.json({ items: projetos })),
 
+  // ─── andaime versions ───────────────────────────────────────────────
+  http.get("*/api/andaime-versions", () =>
+    HttpResponse.json({
+      items: [
+        "v0.7.0",
+        "v0.6.0",
+        "v0.5.0",
+        "v0.4.0",
+        "v0.3.0",
+        "v0.2",
+        "v0.1",
+        "v0",
+      ],
+    }),
+  ),
+
   // ─── métricas ───────────────────────────────────────────────────────
   http.get("*/api/metricas/overview", ({ request }) => {
     const url = new URL(request.url);
