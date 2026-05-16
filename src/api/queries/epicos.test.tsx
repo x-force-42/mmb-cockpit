@@ -29,10 +29,9 @@ describe("useEpicos", () => {
 
 describe("useEpico", () => {
   it("devolve detalhe com ciclos filhos para slug existente", async () => {
-    const { result } = renderHook(
-      () => useEpico("mmb-logger-destilacao"),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => useEpico("mmb-logger-destilacao"), {
+      wrapper: createWrapper(),
+    });
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data?.slug).toBe("mmb-logger-destilacao");
     expect(Array.isArray(result.current.data?.ciclos)).toBe(true);

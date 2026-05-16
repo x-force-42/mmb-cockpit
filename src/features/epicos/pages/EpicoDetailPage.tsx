@@ -37,7 +37,9 @@ export function EpicoDetailPage() {
       <Card>
         <CardHeader>
           <div className="flex flex-wrap items-center gap-3">
-            <CardTitle className="text-lg font-semibold">{epico.slug}</CardTitle>
+            <CardTitle className="text-lg font-semibold">
+              {epico.slug}
+            </CardTitle>
             <EpicoStatusBadge status={epico.status} />
           </div>
           <CardDescription className="font-mono text-xs">
@@ -69,7 +71,9 @@ export function EpicoDetailPage() {
             </span>
             {epico.ciclos_abortados > 0 ? (
               <span className="text-destructive">
-                <strong className="font-medium">{epico.ciclos_abortados}</strong>{" "}
+                <strong className="font-medium">
+                  {epico.ciclos_abortados}
+                </strong>{" "}
                 abortados
               </span>
             ) : null}

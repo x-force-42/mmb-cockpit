@@ -8,12 +8,25 @@ describe("DashboardPage", () => {
     renderWithProviders(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Total de runs")).toBeInTheDocument();
+      expect(screen.getByText("Total ciclos")).toBeInTheDocument();
     });
+    expect(screen.getByText("Épicos")).toBeInTheDocument();
     expect(screen.getByText("Custo total")).toBeInTheDocument();
-    expect(screen.getByText("Tempo médio")).toBeInTheDocument();
-    expect(screen.getByText("Taxa de pushback")).toBeInTheDocument();
-    // valor da fixture: 87 runs
-    expect(screen.getByText("87")).toBeInTheDocument();
+    expect(screen.getByText("Taxa de abort")).toBeInTheDocument();
+    // valor da fixture: 23 ciclos
+    expect(screen.getByText("23")).toBeInTheDocument();
+  });
+
+  it("renderiza StatusBreakdown com todos os 5 estados", async () => {
+    renderWithProviders(<DashboardPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText(/Distribuição por status/i)).toBeInTheDocument(),
+    );
+    expect(screen.getByText(/iniciado/i)).toBeInTheDocument();
+    expect(screen.getByText(/planejado/i)).toBeInTheDocument();
+    expect(screen.getByText(/PR aberto/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/completo/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/abortado/i).length).toBeGreaterThan(0);
   });
 });

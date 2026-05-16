@@ -418,7 +418,8 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     cost_usd: 0.72,
     abort_origin: null,
     abort_reason: null,
-    briefing_md: "# F1\n\nApiError tipado, retry off, MSW handlers cobrindo os 5 endpoints.",
+    briefing_md:
+      "# F1\n\nApiError tipado, retry off, MSW handlers cobrindo os 5 endpoints.",
     review_note: "Bom, mas faltou teste de erro 5xx no client",
     abort_at: null,
     tokens_input: 16400,
@@ -444,7 +445,8 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     cost_usd: 0.88,
     abort_origin: null,
     abort_reason: null,
-    briefing_md: "# F2\n\nshadcn init, tokens dark mode prontos mas sem toggle ainda.",
+    briefing_md:
+      "# F2\n\nshadcn init, tokens dark mode prontos mas sem toggle ainda.",
     review_note: "Bonito, layout sólido",
     abort_at: null,
     tokens_input: 19200,
@@ -499,7 +501,8 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     cost_usd: 0.94,
     abort_origin: null,
     abort_reason: null,
-    briefing_md: "# Separação slug/briefing\n\nDois passos, interface clara entre eles.",
+    briefing_md:
+      "# Separação slug/briefing\n\nDois passos, interface clara entre eles.",
     review_note: "Refatoração elegante",
     abort_at: null,
     tokens_input: 22400,
@@ -524,7 +527,8 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     assertiveness_score: null,
     cost_usd: 0.22,
     abort_origin: "manual",
-    abort_reason: "Rick mudou de ideia: timeout deve ir em config.json, não em pyproject",
+    abort_reason:
+      "Rick mudou de ideia: timeout deve ir em config.json, não em pyproject",
     briefing_md: null,
     review_note: null,
     abort_at: "2026-04-10T12:15:00Z",
@@ -551,7 +555,8 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     cost_usd: 0.61,
     abort_origin: null,
     abort_reason: null,
-    briefing_md: "# Timeout custom\n\nLeitura de config.json com schema validado.",
+    briefing_md:
+      "# Timeout custom\n\nLeitura de config.json com schema validado.",
     review_note: "Funciona, mas testes ficaram superficiais",
     abort_at: null,
     tokens_input: 14800,
@@ -576,7 +581,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     closed_complete_at: "2026-03-26T10:00:00Z",
     merged_to_main: 1,
     assertiveness_score: 4,
-    cost_usd: 1.10,
+    cost_usd: 1.1,
     abort_origin: null,
     abort_reason: null,
     briefing_md: "# EventBus v1\n\nProtocol-based, sync, sem broker externo.",

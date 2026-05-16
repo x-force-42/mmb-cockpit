@@ -9,10 +9,10 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate, formatUSD } from "@/lib/format";
-import type { DailyCost } from "@/types/api";
+import type { DiaCusto } from "@/types/api";
 
 interface Props {
-  data: DailyCost[];
+  data: DiaCusto[];
 }
 
 export function CustoPorDiaChart({ data }: Props) {

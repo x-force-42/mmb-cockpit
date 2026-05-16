@@ -21,7 +21,10 @@ interface Props {
   cicloId: string;
 }
 
-const KIND_ICON: Record<EventoKind, React.ComponentType<{ className?: string }>> = {
+const KIND_ICON: Record<
+  EventoKind,
+  React.ComponentType<{ className?: string }>
+> = {
   state_change: CircleDot,
   msg_send: ArrowUpFromLine,
   msg_receive: ArrowDownToLine,
@@ -114,7 +117,10 @@ export function EventosTimeline({ cicloId }: Props) {
               return (
                 <li key={evt.id} className="flex items-start gap-3 text-sm">
                   <Icon
-                    className={cn("mt-0.5 size-4 shrink-0", severityClass(evt.severity))}
+                    className={cn(
+                      "mt-0.5 size-4 shrink-0",
+                      severityClass(evt.severity),
+                    )}
                   />
                   <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <div className="flex flex-wrap items-baseline gap-x-2">

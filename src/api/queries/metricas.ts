@@ -9,7 +9,6 @@ export const metricasKeys = {
 export function useMetricasOverview(days = 30) {
   return useQuery({
     queryKey: metricasKeys.overview(days),
-    queryFn: () =>
-      apiGet<MetricasOverview>("/api/metricas/overview", { days }),
+    queryFn: () => apiGet<MetricasOverview>("/api/metricas/overview", { days }),
   });
 }

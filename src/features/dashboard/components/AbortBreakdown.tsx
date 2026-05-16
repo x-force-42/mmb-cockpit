@@ -1,13 +1,19 @@
 import { Ban, Cpu, HeartCrack, UserX } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatAbortOrigin, formatNumber } from "@/lib/format";
-import type { AbortBreakdown as AbortBreakdownData, AbortOrigin } from "@/types/api";
+import type {
+  AbortBreakdown as AbortBreakdownData,
+  AbortOrigin,
+} from "@/types/api";
 
 interface Props {
   data: AbortBreakdownData;
 }
 
-const ORIGIN_ICON: Record<AbortOrigin, React.ComponentType<{ className?: string }>> = {
+const ORIGIN_ICON: Record<
+  AbortOrigin,
+  React.ComponentType<{ className?: string }>
+> = {
   heartbeat: HeartCrack,
   manual: UserX,
   self: Ban,
@@ -23,9 +29,7 @@ export function AbortBreakdown({ data }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium">
-          Origem dos aborts
-        </CardTitle>
+        <CardTitle className="text-sm font-medium">Origem dos aborts</CardTitle>
       </CardHeader>
       <CardContent>
         <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">

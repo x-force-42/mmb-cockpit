@@ -115,8 +115,8 @@ function DashboardEmpty() {
       <CardHeader>
         <CardTitle>Sem ciclos ainda</CardTitle>
         <CardDescription>
-          Nenhum ciclo na janela selecionada. Aumente o período ou aguarde
-          o master invocar um planner.
+          Nenhum ciclo na janela selecionada. Aumente o período ou aguarde o
+          master invocar um planner.
         </CardDescription>
       </CardHeader>
     </Card>

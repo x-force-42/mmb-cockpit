@@ -10,11 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type {
-  AbortOrigin,
-  CicloStatus,
-  CiclosListQuery,
-} from "@/types/api";
+import type { AbortOrigin, CicloStatus, CiclosListQuery } from "@/types/api";
 
 const ALL = "__all__";
 

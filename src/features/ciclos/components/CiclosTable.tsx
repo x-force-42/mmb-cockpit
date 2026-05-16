@@ -1,4 +1,11 @@
-import { ArrowDown, ArrowUp, Check, ExternalLink, Minus, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Check,
+  ExternalLink,
+  Minus,
+  X,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Table,
@@ -35,7 +42,10 @@ function truncate(s: string, n: number): string {
 function MergedIcon({ merged }: { merged: MergedToMain }) {
   if (merged === 1) {
     return (
-      <Check className="size-4 text-emerald-600" aria-label="mergeado em main" />
+      <Check
+        className="size-4 text-emerald-600"
+        aria-label="mergeado em main"
+      />
     );
   }
   if (merged === 0) {

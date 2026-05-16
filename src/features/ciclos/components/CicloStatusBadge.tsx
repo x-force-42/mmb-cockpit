@@ -33,7 +33,10 @@ const STATUS_VARIANT: Record<CicloStatus, "outline" | "secondary"> = {
 
 export function CicloStatusBadge({ status }: { status: CicloStatus }) {
   return (
-    <Badge variant={STATUS_VARIANT[status]} className={cn(STATUS_CLASS[status])}>
+    <Badge
+      variant={STATUS_VARIANT[status]}
+      className={cn(STATUS_CLASS[status])}
+    >
       {STATUS_LABEL[status]}
     </Badge>
   );

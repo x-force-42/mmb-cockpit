@@ -1,10 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  formatDateTime,
-  formatNumber,
-  formatUSD,
-} from "@/lib/format";
+import { formatDateTime, formatNumber, formatUSD } from "@/lib/format";
 import type { CicloDetail } from "@/types/api";
 import { CicloStatusBadge } from "./CicloStatusBadge";
 

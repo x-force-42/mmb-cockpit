@@ -102,9 +102,7 @@ function isValidScore(value: unknown): value is AssertivenessScore {
 }
 
 function findEpicoByIdOrSlug(value: string) {
-  return (
-    initialEpicos.find((e) => e.id === value || e.slug === value) ?? null
-  );
+  return initialEpicos.find((e) => e.id === value || e.slug === value) ?? null;
 }
 
 export const handlers = [
@@ -126,7 +124,8 @@ export const handlers = [
 
     let filtered = initialEpicos.slice();
     if (status) filtered = filtered.filter((e) => e.status === status);
-    if (from) filtered = filtered.filter((e) => e.started_at.slice(0, 10) >= from);
+    if (from)
+      filtered = filtered.filter((e) => e.started_at.slice(0, 10) >= from);
     if (to) filtered = filtered.filter((e) => e.started_at.slice(0, 10) <= to);
 
     filtered.sort((a, b) => b.started_at.localeCompare(a.started_at));
@@ -165,8 +164,7 @@ export const handlers = [
     const to = url.searchParams.get("to");
     const limit = Math.min(Number(url.searchParams.get("limit") ?? 50), 200);
     const offset = Math.max(Number(url.searchParams.get("offset") ?? 0), 0);
-    const order =
-      url.searchParams.get("order") ?? "planner_invoked_at:desc";
+    const order = url.searchParams.get("order") ?? "planner_invoked_at:desc";
 
     if (status && !VALID_CICLO_STATUS.includes(status as CicloStatus)) {
       return HttpResponse.json(

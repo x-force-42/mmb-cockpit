@@ -7,7 +7,10 @@ interface Props {
   ciclo: CicloDetail;
 }
 
-const ORIGIN_ICON: Record<AbortOrigin, React.ComponentType<{ className?: string }>> = {
+const ORIGIN_ICON: Record<
+  AbortOrigin,
+  React.ComponentType<{ className?: string }>
+> = {
   heartbeat: HeartCrack,
   manual: UserX,
   self: Ban,
@@ -37,9 +40,7 @@ export function AbortCard({ ciclo }: Props) {
         {ciclo.abort_reason ? (
           <p className="text-sm leading-relaxed">{ciclo.abort_reason}</p>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            Sem razão registrada.
-          </p>
+          <p className="text-sm text-muted-foreground">Sem razão registrada.</p>
         )}
       </CardContent>
     </Card>
