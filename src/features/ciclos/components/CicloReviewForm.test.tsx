@@ -21,6 +21,7 @@ const baseCiclo: CicloDetail = {
   cost_usd: 0.84,
   abort_origin: null,
   abort_reason: null,
+  andaime_version: null,
   briefing_md: null,
   review_note: "ok",
   abort_at: null,

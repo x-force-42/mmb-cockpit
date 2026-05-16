@@ -17,6 +17,7 @@ export interface Epico {
   intencao: string; // texto livre da intenção do Rick
   status: EpicoStatus;
   closed_at: string | null;
+  andaime_version: string | null;
   ciclos_total: number;
   ciclos_completos: number;
   ciclos_abortados: number;
@@ -58,6 +59,7 @@ export interface Ciclo {
   cost_usd: number | null;
   abort_origin: AbortOrigin | null;
   abort_reason: string | null;
+  andaime_version: string | null;
 }
 
 export interface CicloDetail extends Ciclo {
