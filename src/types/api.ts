@@ -1,85 +1,152 @@
 /**
- * Tipos do contrato da API REST do MMB.
- * Fonte autoritativa: ~/llab/mr-meeseeks-box/docs/tasks/E1-api-cockpit.md
- * (seção "Contrato dos 5 endpoints").
+ * Tipos do contrato da API REST do mmb-logger.
+ * Fonte autoritativa (em construção):
+ *   /MMB/mmb-logger/docs/api.md (vai existir quando M1 do logger fechar)
+ *
+ * Por enquanto, este arquivo define o contrato; MSW implementa fixtures.
  */
 
-export type TerminalPhase =
-  | "success"
-  | "meeseeks_failure"
-  | "dev_server_failure"
-  | "garagem_pushback"
-  | "garagem_no_slug"
-  | "garagem_error";
+// ─── épicos ────────────────────────────────────────────────────────────
+
+export type EpicoStatus = "aberto" | "fechado";
+
+export interface Epico {
+  id: string;
+  slug: string;
+  started_at: string; // ISO8601 UTC
+  intencao: string; // texto livre da intenção do Rick
+  status: EpicoStatus;
+  closed_at: string | null;
+  ciclos_total: number;
+  ciclos_completos: number;
+  ciclos_abortados: number;
+}
+
+export interface EpicoDetail extends Epico {
+  /** Ciclos filhos ordenados por planner_invoked_at desc. */
+  ciclos: Ciclo[];
+}
+
+// ─── ciclos ────────────────────────────────────────────────────────────
+
+export type CicloStatus =
+  | "iniciado"
+  | "planejado"
+  | "pr_aberto"
+  | "completo"
+  | "abortado";
+
+export type AbortOrigin = "heartbeat" | "manual" | "self" | "master";
 
 export type MergedToMain = 0 | 1 | null;
 export type AssertivenessScore = 1 | 2 | 3 | 4 | 5 | null;
 
-export type Outcome = "success" | "failure" | "error" | string;
-
-/** Item enxuto da listagem (`GET /api/runs`). */
-export interface Run {
+/** Item enxuto da listagem (`GET /api/ciclos`). */
+export interface Ciclo {
   id: string;
-  project_id: string;
-  project_slug: string;
-  started_at: string;
-  task_raw: string;
-  terminal_phase: TerminalPhase;
-  total_elapsed_s: number;
-  garagem_outcome: Outcome | null;
-  garagem_cost_usd: number | null;
-  meeseeks_outcome: Outcome | null;
-  meeseeks_cost_usd: number | null;
+  epico_id: string;
+  project: string;
+  planner_invoked_at: string;
+  status: CicloStatus;
+  instruction: string;
+  pr_url: string | null;
+  pr_number: number | null;
+  closed_partial_at: string | null;
+  closed_complete_at: string | null;
   merged_to_main: MergedToMain;
   assertiveness_score: AssertivenessScore;
+  cost_usd: number | null;
+  abort_origin: AbortOrigin | null;
+  abort_reason: string | null;
 }
 
-/**
- * Detalhe completo (`GET /api/runs/{id}`).
- * Estende `Run` com os campos extras da tabela + JSONs parseados.
- */
-export interface RunDetail extends Run {
-  finished_at: string | null;
-  briefing_json: Record<string, unknown> | null;
-  meeseeks_commits_json: unknown[] | null;
+export interface CicloDetail extends Ciclo {
+  briefing_md: string | null;
   review_note: string | null;
-  garagem_elapsed_s: number | null;
-  meeseeks_elapsed_s: number | null;
-  // Quaisquer outros campos retornados pela API ficam acessíveis
-  // via index signature pra não engessar a evolução do schema.
-  [extra: string]: unknown;
+  abort_at: string | null;
+  tokens_input: number | null;
+  tokens_output: number | null;
+  diff_added: number | null;
+  diff_deleted: number | null;
+  diff_files: number | null;
 }
 
-export interface RunsListResponse {
-  items: Run[];
+// ─── eventos do ciclo ──────────────────────────────────────────────────
+
+export type EventoKind =
+  | "state_change"
+  | "msg_send"
+  | "msg_receive"
+  | "heartbeat_loss"
+  | "atomic_spawn"
+  | "atomic_deregister"
+  | "pr_opened"
+  | "journal_warn"
+  | "journal_error"
+  | "journal_critical";
+
+export type EventoSeverity = "info" | "warn" | "error" | "critical";
+
+export interface Evento {
+  id: number;
+  ciclo_id: string;
+  ts: string;
+  kind: EventoKind;
+  severity: EventoSeverity | null;
+  payload: Record<string, unknown>;
+}
+
+// ─── listagens + filtros ───────────────────────────────────────────────
+
+export interface EpicosListResponse {
+  items: Epico[];
   total: number;
   limit: number;
   offset: number;
 }
 
-export type RunsListOrder =
-  | "started_at:asc"
-  | "started_at:desc"
-  | "total_elapsed_s:asc"
-  | "total_elapsed_s:desc";
-
-export interface RunsListQuery {
-  project?: string;
-  phase?: TerminalPhase;
-  from?: string; // YYYY-MM-DD
-  to?: string; // YYYY-MM-DD
+export interface EpicosListQuery {
+  status?: EpicoStatus;
+  from?: string;
+  to?: string;
   limit?: number;
   offset?: number;
-  order?: RunsListOrder;
 }
 
-export interface RunPatch {
+export interface CiclosListResponse {
+  items: Ciclo[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export type CiclosListOrder =
+  | "planner_invoked_at:asc"
+  | "planner_invoked_at:desc"
+  | "cost_usd:asc"
+  | "cost_usd:desc";
+
+export interface CiclosListQuery {
+  epico?: string;
+  project?: string;
+  status?: CicloStatus;
+  abort_origin?: AbortOrigin;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+  order?: CiclosListOrder;
+}
+
+export interface CicloPatch {
   merged_to_main?: MergedToMain;
   assertiveness_score?: AssertivenessScore;
   review_note?: string | null;
 }
 
-export interface Project {
+// ─── projetos ──────────────────────────────────────────────────────────
+
+export interface Projeto {
   id: string;
   slug: string;
   name: string;
@@ -88,29 +155,35 @@ export interface Project {
   created_at: string;
 }
 
-export interface ProjectsListResponse {
-  items: Project[];
+export interface ProjetosListResponse {
+  items: Projeto[];
 }
 
-export interface DailyCost {
+// ─── métricas ──────────────────────────────────────────────────────────
+
+export interface DiaCusto {
   dia: string;
   usd: number;
 }
 
-export interface DailyRuns {
+export interface DiaCiclos {
   dia: string;
   n: number;
 }
 
-export type PhaseBreakdown = Partial<Record<TerminalPhase, number>>;
+export type StatusBreakdown = Partial<Record<CicloStatus, number>>;
+export type AbortBreakdown = Partial<Record<AbortOrigin, number>>;
 
-export interface MetricsOverview {
+export interface MetricasOverview {
   window_days: number;
-  runs_total: number;
+  ciclos_total: number;
+  epicos_total: number;
   custo_total_usd: number;
-  tempo_medio_s: number;
-  taxa_pushback: number;
-  custo_por_dia: DailyCost[];
-  runs_por_dia: DailyRuns[];
-  phase_breakdown: PhaseBreakdown;
+  tempo_medio_completo_s: number;
+  taxa_abort: number;
+  taxa_merged: number;
+  custo_por_dia: DiaCusto[];
+  ciclos_por_dia: DiaCiclos[];
+  status_breakdown: StatusBreakdown;
+  abort_breakdown: AbortBreakdown;
 }
