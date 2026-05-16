@@ -1,4 +1,12 @@
-import { Ban, Cpu, HeartCrack, UserX } from "lucide-react";
+import {
+  Ban,
+  Clock,
+  Cpu,
+  HeartCrack,
+  TimerOff,
+  UserX,
+  XCircle,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatAbortOrigin, formatNumber } from "@/lib/format";
 import type {
@@ -18,9 +26,20 @@ const ORIGIN_ICON: Record<
   manual: UserX,
   self: Ban,
   master: Cpu,
+  "worker-exit": XCircle,
+  "worker-timeout": TimerOff,
+  stale: Clock,
 };
 
-const ORIGIN_ORDER: AbortOrigin[] = ["heartbeat", "manual", "self", "master"];
+const ORIGIN_ORDER: AbortOrigin[] = [
+  "heartbeat",
+  "manual",
+  "self",
+  "master",
+  "worker-exit",
+  "worker-timeout",
+  "stale",
+];
 
 export function AbortBreakdown({ data }: Props) {
   const total = ORIGIN_ORDER.reduce((acc, o) => acc + (data[o] ?? 0), 0);

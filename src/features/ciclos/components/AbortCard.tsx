@@ -1,4 +1,13 @@
-import { AlertTriangle, Ban, Cpu, HeartCrack, UserX } from "lucide-react";
+import {
+  AlertTriangle,
+  Ban,
+  Clock,
+  Cpu,
+  HeartCrack,
+  TimerOff,
+  UserX,
+  XCircle,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatAbortOrigin, formatDateTime } from "@/lib/format";
 import type { AbortOrigin, CicloDetail } from "@/types/api";
@@ -15,6 +24,9 @@ const ORIGIN_ICON: Record<
   manual: UserX,
   self: Ban,
   master: Cpu,
+  "worker-exit": XCircle,
+  "worker-timeout": TimerOff,
+  stale: Clock,
 };
 
 export function AbortCard({ ciclo }: Props) {
