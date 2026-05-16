@@ -3,7 +3,8 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { to: "/", label: "Dashboard", end: true },
-  { to: "/runs", label: "Runs", end: false },
+  { to: "/epicos", label: "Épicos", end: false },
+  { to: "/ciclos", label: "Ciclos", end: false },
 ] as const;
 
 export function Sidebar() {

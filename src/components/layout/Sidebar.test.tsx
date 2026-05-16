@@ -12,20 +12,22 @@ describe("Sidebar", () => {
     );
 
     const dashboard = screen.getByRole("link", { name: /dashboard/i });
-    const runs = screen.getByRole("link", { name: /runs/i });
+    const epicos = screen.getByRole("link", { name: /épicos/i });
+    const ciclos = screen.getByRole("link", { name: /ciclos/i });
 
     expect(dashboard).toHaveAttribute("href", "/");
-    expect(runs).toHaveAttribute("href", "/runs");
+    expect(epicos).toHaveAttribute("href", "/epicos");
+    expect(ciclos).toHaveAttribute("href", "/ciclos");
   });
 
   it("marca o link da rota ativa", () => {
     render(
-      <MemoryRouter initialEntries={["/runs"]}>
+      <MemoryRouter initialEntries={["/ciclos"]}>
         <Sidebar />
       </MemoryRouter>,
     );
 
-    const runs = screen.getByRole("link", { name: /runs/i });
-    expect(runs).toHaveAttribute("aria-current", "page");
+    const ciclos = screen.getByRole("link", { name: /ciclos/i });
+    expect(ciclos).toHaveAttribute("aria-current", "page");
   });
 });
