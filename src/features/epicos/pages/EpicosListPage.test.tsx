@@ -1,6 +1,8 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { HttpResponse, http } from "msw";
 import { describe, expect, it } from "vitest";
+import { server } from "@/api/mocks/server";
 import { renderWithProviders } from "@/test/render";
 import { EpicosListPage } from "./EpicosListPage";
 
@@ -42,5 +44,22 @@ describe("EpicosListPage", () => {
     await waitFor(() => {
       expect(screen.getByText("aquarium-prototipo")).toBeInTheDocument();
     });
+  });
+
+  it("renderiza error state com botão de retry quando a API falha", async () => {
+    server.use(
+      http.get("*/api/epicos", () =>
+        HttpResponse.json({ detail: "boom" }, { status: 500 }),
+      ),
+    );
+
+    renderWithProviders(<EpicosListPage />);
+
+    expect(
+      await screen.findByText(/não consegui carregar os épicos/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /tentar novamente/i }),
+    ).toBeInTheDocument();
   });
 });
