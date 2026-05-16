@@ -21,10 +21,8 @@ export class ApiError extends Error {
   }
 }
 
-export type QueryParams = Record<
-  string,
-  string | number | boolean | null | undefined
->;
+export type QueryPrimitive = string | number | boolean | null | undefined;
+export type QueryParams = Record<string, QueryPrimitive | QueryPrimitive[]>;
 
 function buildUrl(path: string, params?: object): string {
   const base = getBaseUrl().replace(/\/$/, "");
@@ -32,6 +30,14 @@ function buildUrl(path: string, params?: object): string {
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       if (value === undefined || value === null || value === "") continue;
+      if (Array.isArray(value)) {
+        // arrays viram a mesma key repetida (?k=a&k=b), nunca JSON nem CSV.
+        for (const item of value) {
+          if (item === undefined || item === null || item === "") continue;
+          url.searchParams.append(key, String(item));
+        }
+        continue;
+      }
       url.searchParams.set(key, String(value));
     }
   }

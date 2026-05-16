@@ -25,7 +25,7 @@ export const ciclos: CicloDetail[] = [
     cost_usd: 0.84,
     abort_origin: null,
     abort_reason: null,
-    andaime_version: null,
+    andaime_version: "v0.5.0",
     briefing_md: `# Extração do módulo de logging
 
 ## Intenção
@@ -208,7 +208,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     cost_usd: 0.42,
     abort_origin: null,
     abort_reason: null,
-    andaime_version: null,
+    andaime_version: "v0.4.0",
     briefing_md:
       "# Scaffold aquarium\n\nVite + PixiJS, peixinho `assets/fish.png` no centro.",
     review_note:
