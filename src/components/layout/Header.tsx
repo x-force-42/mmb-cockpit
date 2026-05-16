@@ -1,4 +1,5 @@
 import { Box } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function Header() {
   return (
@@ -19,8 +20,14 @@ export function Header() {
           </span>
         </div>
       </div>
-      <div data-slot="active-project" className="text-xs text-muted-foreground">
-        {/* placeholder pro indicador de projeto ativo (vem em F3+) */}
+      <div className="flex items-center gap-2">
+        <div
+          data-slot="active-project"
+          className="text-xs text-muted-foreground"
+        >
+          {/* placeholder pro indicador de projeto ativo (vem em F3+) */}
+        </div>
+        <ThemeToggle />
       </div>
     </header>
   );
