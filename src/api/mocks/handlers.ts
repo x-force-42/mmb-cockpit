@@ -1,71 +1,89 @@
 import { HttpResponse, http } from "msw";
 import type {
+  AbortOrigin,
   AssertivenessScore,
+  Ciclo,
+  CicloDetail,
+  CicloPatch,
+  CicloStatus,
+  CiclosListResponse,
+  EpicoDetail,
+  EpicoStatus,
+  EpicosListResponse,
   MergedToMain,
-  Run,
-  RunDetail,
-  RunPatch,
-  RunsListResponse,
-  TerminalPhase,
 } from "../../types/api";
-import { metrics } from "./fixtures/metrics";
-import { projects } from "./fixtures/projects";
-import { runs as initialRuns } from "./fixtures/runs";
+import { ciclos as initialCiclos } from "./fixtures/ciclos";
+import { epicos as initialEpicos } from "./fixtures/epicos";
+import { eventos as initialEventos } from "./fixtures/eventos";
+import { metricas } from "./fixtures/metricas";
+import { projetos } from "./fixtures/projetos";
 
 // Estado mutável em memória pra suportar PATCH entre testes.
-// `resetMocks()` restaura.
-let runs: RunDetail[] = [...initialRuns];
+let ciclos: CicloDetail[] = initialCiclos.map((c) => ({ ...c }));
+const eventos = [...initialEventos];
 
 export function resetMocks(): void {
-  runs = initialRuns.map((r) => ({ ...r }));
+  ciclos = initialCiclos.map((c) => ({ ...c }));
 }
 
-const VALID_PHASES: TerminalPhase[] = [
-  "success",
-  "meeseeks_failure",
-  "dev_server_failure",
-  "garagem_pushback",
-  "garagem_no_slug",
-  "garagem_error",
+const VALID_CICLO_STATUS: CicloStatus[] = [
+  "iniciado",
+  "planejado",
+  "pr_aberto",
+  "completo",
+  "abortado",
 ];
 
-const VALID_ORDERS = new Set([
-  "started_at:asc",
-  "started_at:desc",
-  "total_elapsed_s:asc",
-  "total_elapsed_s:desc",
+const VALID_ABORT_ORIGIN: AbortOrigin[] = [
+  "heartbeat",
+  "manual",
+  "self",
+  "master",
+];
+
+const VALID_EPICO_STATUS: EpicoStatus[] = ["aberto", "fechado"];
+
+const VALID_CICLOS_ORDERS = new Set([
+  "planner_invoked_at:asc",
+  "planner_invoked_at:desc",
+  "cost_usd:asc",
+  "cost_usd:desc",
 ]);
 
-function toRunListItem(r: RunDetail): Run {
+function toCicloListItem(c: CicloDetail): Ciclo {
   const {
     id,
-    project_id,
-    project_slug,
-    started_at,
-    task_raw,
-    terminal_phase,
-    total_elapsed_s,
-    garagem_outcome,
-    garagem_cost_usd,
-    meeseeks_outcome,
-    meeseeks_cost_usd,
+    epico_id,
+    project,
+    planner_invoked_at,
+    status,
+    instruction,
+    pr_url,
+    pr_number,
+    closed_partial_at,
+    closed_complete_at,
     merged_to_main,
     assertiveness_score,
-  } = r;
+    cost_usd,
+    abort_origin,
+    abort_reason,
+  } = c;
   return {
     id,
-    project_id,
-    project_slug,
-    started_at,
-    task_raw,
-    terminal_phase,
-    total_elapsed_s,
-    garagem_outcome,
-    garagem_cost_usd,
-    meeseeks_outcome,
-    meeseeks_cost_usd,
+    epico_id,
+    project,
+    planner_invoked_at,
+    status,
+    instruction,
+    pr_url,
+    pr_number,
+    closed_partial_at,
+    closed_complete_at,
     merged_to_main,
     assertiveness_score,
+    cost_usd,
+    abort_origin,
+    abort_reason,
   };
 }
 
@@ -83,78 +101,174 @@ function isValidScore(value: unknown): value is AssertivenessScore {
   );
 }
 
+function findEpicoByIdOrSlug(value: string) {
+  return (
+    initialEpicos.find((e) => e.id === value || e.slug === value) ?? null
+  );
+}
+
 export const handlers = [
-  http.get("*/api/runs", ({ request }) => {
+  // ─── épicos ─────────────────────────────────────────────────────────
+  http.get("*/api/epicos", ({ request }) => {
     const url = new URL(request.url);
-    const project = url.searchParams.get("project");
-    const phase = url.searchParams.get("phase");
+    const status = url.searchParams.get("status");
     const from = url.searchParams.get("from");
     const to = url.searchParams.get("to");
     const limit = Math.min(Number(url.searchParams.get("limit") ?? 50), 200);
     const offset = Math.max(Number(url.searchParams.get("offset") ?? 0), 0);
-    const order = url.searchParams.get("order") ?? "started_at:desc";
 
-    if (phase && !VALID_PHASES.includes(phase as TerminalPhase)) {
+    if (status && !VALID_EPICO_STATUS.includes(status as EpicoStatus)) {
       return HttpResponse.json(
-        { detail: `phase inválida: ${phase}` },
+        { detail: `status inválido: ${status}` },
         { status: 422 },
       );
     }
-    if (!VALID_ORDERS.has(order)) {
+
+    let filtered = initialEpicos.slice();
+    if (status) filtered = filtered.filter((e) => e.status === status);
+    if (from) filtered = filtered.filter((e) => e.started_at.slice(0, 10) >= from);
+    if (to) filtered = filtered.filter((e) => e.started_at.slice(0, 10) <= to);
+
+    filtered.sort((a, b) => b.started_at.localeCompare(a.started_at));
+
+    const total = filtered.length;
+    const items = filtered.slice(offset, offset + limit);
+    const body: EpicosListResponse = { items, total, limit, offset };
+    return HttpResponse.json(body);
+  }),
+
+  http.get("*/api/epicos/:id", ({ params }) => {
+    const epico = findEpicoByIdOrSlug(String(params.id));
+    if (!epico) {
+      return HttpResponse.json(
+        { detail: "épico não encontrado" },
+        { status: 404 },
+      );
+    }
+    const ciclosDoEpico = ciclos
+      .filter((c) => c.epico_id === epico.id)
+      .slice()
+      .sort((a, b) => b.planner_invoked_at.localeCompare(a.planner_invoked_at))
+      .map(toCicloListItem);
+    const body: EpicoDetail = { ...epico, ciclos: ciclosDoEpico };
+    return HttpResponse.json(body);
+  }),
+
+  // ─── ciclos ─────────────────────────────────────────────────────────
+  http.get("*/api/ciclos", ({ request }) => {
+    const url = new URL(request.url);
+    const epicoQ = url.searchParams.get("epico");
+    const project = url.searchParams.get("project");
+    const status = url.searchParams.get("status");
+    const abortOrigin = url.searchParams.get("abort_origin");
+    const from = url.searchParams.get("from");
+    const to = url.searchParams.get("to");
+    const limit = Math.min(Number(url.searchParams.get("limit") ?? 50), 200);
+    const offset = Math.max(Number(url.searchParams.get("offset") ?? 0), 0);
+    const order =
+      url.searchParams.get("order") ?? "planner_invoked_at:desc";
+
+    if (status && !VALID_CICLO_STATUS.includes(status as CicloStatus)) {
+      return HttpResponse.json(
+        { detail: `status inválido: ${status}` },
+        { status: 422 },
+      );
+    }
+    if (
+      abortOrigin &&
+      !VALID_ABORT_ORIGIN.includes(abortOrigin as AbortOrigin)
+    ) {
+      return HttpResponse.json(
+        { detail: `abort_origin inválido: ${abortOrigin}` },
+        { status: 422 },
+      );
+    }
+    if (!VALID_CICLOS_ORDERS.has(order)) {
       return HttpResponse.json(
         { detail: `order inválido: ${order}` },
         { status: 422 },
       );
     }
 
-    let filtered = runs.slice();
-    if (project) filtered = filtered.filter((r) => r.project_slug === project);
-    if (phase) filtered = filtered.filter((r) => r.terminal_phase === phase);
+    let filtered = ciclos.slice();
+    if (epicoQ) {
+      const matchedEpico = findEpicoByIdOrSlug(epicoQ);
+      const epicoId = matchedEpico?.id ?? epicoQ;
+      filtered = filtered.filter((c) => c.epico_id === epicoId);
+    }
+    if (project) filtered = filtered.filter((c) => c.project === project);
+    if (status) filtered = filtered.filter((c) => c.status === status);
+    if (abortOrigin) {
+      filtered = filtered.filter((c) => c.abort_origin === abortOrigin);
+    }
     if (from) {
-      filtered = filtered.filter((r) => r.started_at.slice(0, 10) >= from);
+      filtered = filtered.filter(
+        (c) => c.planner_invoked_at.slice(0, 10) >= from,
+      );
     }
     if (to) {
-      filtered = filtered.filter((r) => r.started_at.slice(0, 10) <= to);
+      filtered = filtered.filter(
+        (c) => c.planner_invoked_at.slice(0, 10) <= to,
+      );
     }
 
     const [field, direction] = order.split(":") as [
-      "started_at" | "total_elapsed_s",
+      "planner_invoked_at" | "cost_usd",
       "asc" | "desc",
     ];
     filtered.sort((a, b) => {
-      const av = a[field] as number | string;
-      const bv = b[field] as number | string;
+      const av = a[field];
+      const bv = b[field];
+      // null vai pro fim, independente da direção
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
       if (av < bv) return direction === "asc" ? -1 : 1;
       if (av > bv) return direction === "asc" ? 1 : -1;
       return 0;
     });
 
     const total = filtered.length;
-    const items = filtered.slice(offset, offset + limit).map(toRunListItem);
-    const body: RunsListResponse = { items, total, limit, offset };
+    const items = filtered.slice(offset, offset + limit).map(toCicloListItem);
+    const body: CiclosListResponse = { items, total, limit, offset };
     return HttpResponse.json(body);
   }),
 
-  http.get("*/api/runs/:id", ({ params }) => {
-    const run = runs.find((r) => r.id === params.id);
-    if (!run) {
+  http.get("*/api/ciclos/:id", ({ params }) => {
+    const ciclo = ciclos.find((c) => c.id === params.id);
+    if (!ciclo) {
       return HttpResponse.json(
-        { detail: "run não encontrado" },
+        { detail: "ciclo não encontrado" },
         { status: 404 },
       );
     }
-    return HttpResponse.json(run);
+    return HttpResponse.json(ciclo);
   }),
 
-  http.patch("*/api/runs/:id", async ({ params, request }) => {
-    const idx = runs.findIndex((r) => r.id === params.id);
-    if (idx === -1) {
+  http.get("*/api/ciclos/:id/eventos", ({ params }) => {
+    const ciclo = ciclos.find((c) => c.id === params.id);
+    if (!ciclo) {
       return HttpResponse.json(
-        { detail: "run não encontrado" },
+        { detail: "ciclo não encontrado" },
         { status: 404 },
       );
     }
-    const body = (await request.json()) as Partial<RunPatch> &
+    const items = eventos
+      .filter((e) => e.ciclo_id === params.id)
+      .slice()
+      .sort((a, b) => a.ts.localeCompare(b.ts));
+    return HttpResponse.json({ items });
+  }),
+
+  http.patch("*/api/ciclos/:id", async ({ params, request }) => {
+    const idx = ciclos.findIndex((c) => c.id === params.id);
+    if (idx === -1) {
+      return HttpResponse.json(
+        { detail: "ciclo não encontrado" },
+        { status: 404 },
+      );
+    }
+    const body = (await request.json()) as Partial<CicloPatch> &
       Record<string, unknown>;
     if ("merged_to_main" in body && !isValidMerged(body.merged_to_main)) {
       return HttpResponse.json(
@@ -171,8 +285,8 @@ export const handlers = [
         { status: 422 },
       );
     }
-    const current = runs[idx];
-    const updated: RunDetail = { ...current };
+    const current = ciclos[idx];
+    const updated: CicloDetail = { ...current };
     if ("merged_to_main" in body && isValidMerged(body.merged_to_main)) {
       updated.merged_to_main = body.merged_to_main;
     }
@@ -186,15 +300,17 @@ export const handlers = [
       updated.review_note =
         body.review_note === null ? null : String(body.review_note ?? "");
     }
-    runs[idx] = updated;
+    ciclos[idx] = updated;
     return HttpResponse.json(updated);
   }),
 
-  http.get("*/api/projects", () => HttpResponse.json({ items: projects })),
+  // ─── projetos ───────────────────────────────────────────────────────
+  http.get("*/api/projetos", () => HttpResponse.json({ items: projetos })),
 
-  http.get("*/api/metrics/overview", ({ request }) => {
+  // ─── métricas ───────────────────────────────────────────────────────
+  http.get("*/api/metricas/overview", ({ request }) => {
     const url = new URL(request.url);
     const days = Number(url.searchParams.get("days") ?? 30);
-    return HttpResponse.json({ ...metrics, window_days: days });
+    return HttpResponse.json({ ...metricas, window_days: days });
   }),
 ];
