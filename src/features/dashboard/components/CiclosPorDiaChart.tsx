@@ -8,7 +8,7 @@ import {
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDate } from "@/lib/format";
+import { formatLocalDate } from "@/lib/format";
 import type { DiaCiclos } from "@/types/api";
 
 interface Props {
@@ -33,7 +33,7 @@ export function CiclosPorDiaChart({ data }: Props) {
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis
                 dataKey="dia"
-                tickFormatter={formatDate}
+                tickFormatter={formatLocalDate}
                 fontSize={11}
                 stroke="currentColor"
                 className="text-muted-foreground"
@@ -45,7 +45,7 @@ export function CiclosPorDiaChart({ data }: Props) {
                 className="text-muted-foreground"
               />
               <Tooltip
-                labelFormatter={(label) => formatDate(String(label))}
+                labelFormatter={(label) => formatLocalDate(String(label))}
                 formatter={(value) => [Number(value), "Ciclos"]}
                 contentStyle={{
                   fontSize: 12,
