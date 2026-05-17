@@ -3,6 +3,7 @@ import {
   formatDate,
   formatDateTime,
   formatDuration,
+  formatLocalDate,
   formatNumber,
   formatPercent,
   formatUSD,
@@ -38,5 +39,19 @@ describe("format helpers", () => {
   it("formatDate / formatDateTime: aceita ISO e devolve string", () => {
     expect(formatDate("2026-05-14T12:00:00")).toMatch(/14/);
     expect(formatDateTime("2026-05-14T09:30:00")).toMatch(/14/);
+  });
+
+  describe("formatLocalDate — regressão tz-cockpit-dashboard", () => {
+    it("string só-data retorna a data correta sem deslocamento de fuso", () => {
+      // new Date("2026-05-16") seria UTC midnight → "15/05/2026" em BRT.
+      // formatLocalDate parseia como meia-noite local → "16/05/2026" em qualquer TZ.
+      expect(formatLocalDate("2026-05-16")).toBe("16/05/2026");
+      expect(formatLocalDate("2026-05-17")).toBe("17/05/2026");
+    });
+
+    it("formatDateTime com timestamp completo não regride", () => {
+      // Só verifica a data — a hora varia conforme o fuso do ambiente de CI.
+      expect(formatDateTime("2026-05-16T17:07:06Z")).toMatch(/16\/05\/2026/);
+    });
   });
 });
