@@ -43,6 +43,13 @@ export function formatDate(iso: string): string {
   return dateFormatter.format(new Date(iso));
 }
 
+// Strings só-data ("YYYY-MM-DD") são tratadas como UTC midnight por new Date(iso),
+// causando deslocamento de -1 dia em BRT. Este helper parseia como meia-noite local.
+export function formatLocalDate(dateOnly: string): string {
+  const [y, m, d] = dateOnly.split("-").map(Number);
+  return dateFormatter.format(new Date(y, m - 1, d));
+}
+
 export function formatPercent(value: number | null | undefined): string {
   if (value == null) return "—";
   return `${(value * 100).toFixed(1)}%`;
