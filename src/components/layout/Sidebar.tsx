@@ -20,7 +20,11 @@ const NAV_ITEMS: readonly NavItem[] = [
   { to: "/ciclos", label: "Ciclos", end: false, icon: Activity },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  collapsed: boolean;
+}
+
+export function Sidebar({ collapsed }: SidebarProps) {
   return (
     <nav
       aria-label="Navegação principal"
@@ -33,9 +37,12 @@ export function Sidebar() {
             key={item.to}
             to={item.to}
             end={item.end}
+            title={collapsed ? item.label : undefined}
+            aria-label={collapsed ? item.label : undefined}
             className={({ isActive }) =>
               cn(
-                "group relative flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors",
+                "group relative flex items-center rounded-md py-2 text-sm transition-colors",
+                collapsed ? "justify-center px-0" : "gap-2.5 px-2.5",
                 isActive
                   ? "bg-primary/10 font-medium text-foreground"
                   : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
@@ -44,22 +51,24 @@ export function Sidebar() {
           >
             {({ isActive }) => (
               <>
-                <span
-                  aria-hidden
-                  className={cn(
-                    "absolute inset-y-1 left-0 w-0.5 rounded-full transition-colors",
-                    isActive ? "bg-primary" : "bg-transparent",
-                  )}
-                />
+                {!collapsed && (
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "absolute inset-y-1 left-0 w-0.5 rounded-full transition-colors",
+                      isActive ? "bg-primary" : "bg-transparent",
+                    )}
+                  />
+                )}
                 <Icon
                   className={cn(
-                    "size-4 transition-colors",
+                    "size-4 shrink-0 transition-colors",
                     isActive
                       ? "text-primary"
                       : "text-muted-foreground group-hover:text-foreground",
                   )}
                 />
-                <span>{item.label}</span>
+                {!collapsed && <span>{item.label}</span>}
               </>
             )}
           </NavLink>
