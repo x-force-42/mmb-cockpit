@@ -30,7 +30,7 @@ export function EpicosTable({ epicos }: Props) {
   const navigate = useNavigate();
   return (
     <TooltipProvider>
-      <div className="overflow-hidden rounded-md border bg-background shadow-xs">
+      <div className="overflow-hidden rounded-md border bg-background shadow-xs [&_tr>*:first-child]:pl-4 [&_tr>*:last-child]:pr-4">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-muted/60 backdrop-blur-sm">
             <TableRow className="hover:bg-transparent">
