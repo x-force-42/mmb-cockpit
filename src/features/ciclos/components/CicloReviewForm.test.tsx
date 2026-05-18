@@ -22,6 +22,7 @@ const baseCiclo: CicloDetail = {
   abort_origin: null,
   abort_reason: null,
   andaime_version: null,
+  model: null,
   briefing_md: null,
   review_note: "ok",
   abort_at: null,

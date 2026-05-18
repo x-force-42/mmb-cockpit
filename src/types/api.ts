@@ -67,6 +67,7 @@ export interface Ciclo {
   abort_origin: AbortOrigin | null;
   abort_reason: string | null;
   andaime_version: string | null;
+  model: string | null;
 }
 
 export interface CicloDetail extends Ciclo {

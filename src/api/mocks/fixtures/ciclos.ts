@@ -26,6 +26,7 @@ export const ciclos: CicloDetail[] = [
     abort_origin: null,
     abort_reason: null,
     andaime_version: "v0.5.0",
+    model: null,
     briefing_md: `# Extração do módulo de logging
 
 ## Intenção
@@ -68,6 +69,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Brief\n\nProduzir `docs/M2.md` cobrindo: contexto, schema novo,\nendpoints, decisões fechadas e fora-de-escopo.",
     review_note: "Doc enxuto, sem floreios — perfeito",
@@ -96,6 +98,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md: "# Brief M2\n\nVer body da issue #6 — completíssimo.",
     review_note: null,
     abort_at: null,
@@ -123,6 +126,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Brief M3\n\nPlanner já entregou briefing maduro com 9 endpoints,\nvalidações 422, paginação e ordenação.",
     review_note: null,
@@ -152,6 +156,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_reason:
       "atômico parou de pingar há 612s; última atividade ficou no meio da escrita do teste de migração reversa",
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: "2026-05-14T16:42:30Z",
@@ -180,6 +185,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_reason:
       "master decidiu pausar: refactor colidiria com o épico mmb-logger-destilacao em andamento, melhor empilhar depois",
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: "2026-05-15T07:20:11Z",
@@ -209,6 +215,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: "v0.4.0",
+    model: null,
     briefing_md:
       "# Scaffold aquarium\n\nVite + PixiJS, peixinho `assets/fish.png` no centro.",
     review_note:
@@ -238,6 +245,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: "manual",
     abort_reason: "Rick pediu pra parar — quer rediscutir feel antes de codar",
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: "2026-05-09T11:25:42Z",
@@ -266,6 +274,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_reason:
       "atômico identificou que o framerate cai pra 12fps com 30+ peixinhos e o brief proíbe otimização — saiu sem entregar pra orq replanejar com budget de perf",
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Boids\n\nImplementar Reynolds boids puro, sem otimizar quadtree.",
     review_note: null,
@@ -295,6 +304,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_reason:
       "master decidiu mover áudio pra depois do MVP visual — não bloqueia o resto e está consumindo iteração",
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: "2026-05-11T10:48:00Z",
@@ -322,6 +332,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: "heartbeat",
     abort_reason: "heartbeat parou às 08:13:22 — sem entrega",
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: "2026-05-12T08:23:30Z",
@@ -349,6 +360,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: null,
@@ -376,6 +388,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Tanque MVP\n\nDimensões fixas, sprite ampliado, damping 0.92 no movimento.",
     review_note: null,
@@ -406,6 +419,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md: "# F0\n\nScaffold mínimo, sem Tailwind/shadcn ainda.",
     review_note: "Saiu redondo",
     abort_at: null,
@@ -433,6 +447,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# F1\n\nApiError tipado, retry off, MSW handlers cobrindo os 5 endpoints.",
     review_note: "Bom, mas faltou teste de erro 5xx no client",
@@ -461,6 +476,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# F2\n\nshadcn init, tokens dark mode prontos mas sem toggle ainda.",
     review_note: "Bonito, layout sólido",
@@ -489,6 +505,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# M1\n\nDashboard + Lista + Detalhe, todos os 3 PATCH endpoints validados.",
     review_note: "Excelente, fechou o épico cockpit-mvp",
@@ -519,6 +536,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Separação slug/briefing\n\nDois passos, interface clara entre eles.",
     review_note: "Refatoração elegante",
@@ -548,6 +566,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_reason:
       "Rick mudou de ideia: timeout deve ir em config.json, não em pyproject",
     andaime_version: null,
+    model: null,
     briefing_md: null,
     review_note: null,
     abort_at: "2026-04-10T12:15:00Z",
@@ -575,6 +594,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Timeout custom\n\nLeitura de config.json com schema validado.",
     review_note: "Funciona, mas testes ficaram superficiais",
@@ -605,6 +625,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md: "# EventBus v1\n\nProtocol-based, sync, sem broker externo.",
     review_note: "Boa fundação, sync por enquanto OK",
     abort_at: null,
@@ -632,6 +653,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_origin: null,
     abort_reason: null,
     andaime_version: null,
+    model: null,
     briefing_md: "# Logger como subscriber\n\nRemove acoplamento direto.",
     review_note: "Excelente, fechou o épico",
     abort_at: null,
@@ -660,6 +682,7 @@ mantendo \`from mmb_logger import record_event\` como interface pública.
     abort_reason:
       "atômico avaliou que async exigia rewrite do EventBus sync — fora do escopo do brief; saiu sem chutar",
     andaime_version: null,
+    model: null,
     briefing_md:
       "# Async subscriber\n\nFila in-memory + flush em thread, escopo restrito.",
     review_note: null,

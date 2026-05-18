@@ -88,7 +88,7 @@ function BriefingCard({ ciclo }: { ciclo: CicloDetail }) {
       </CardHeader>
       <CardContent>
         {ciclo.briefing_md ? (
-          <pre className="overflow-x-auto whitespace-pre-wrap rounded-md bg-muted p-3 text-xs leading-relaxed">
+          <pre className="overflow-x-auto whitespace-pre-wrap rounded-md bg-muted p-3 text-sm leading-relaxed">
             {ciclo.briefing_md}
           </pre>
         ) : (

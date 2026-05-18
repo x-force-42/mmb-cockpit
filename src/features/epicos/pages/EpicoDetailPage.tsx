@@ -51,6 +51,9 @@ export function EpicoDetailPage() {
             {epico.closed_at
               ? ` · Fechado em ${formatDateTime(epico.closed_at)}`
               : ""}
+            {epico.andaime_version
+              ? ` · Andaime ${epico.andaime_version}`
+              : ""}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">

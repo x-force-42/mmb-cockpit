@@ -40,6 +40,20 @@ export function CicloMetadata({ ciclo }: Props) {
               : "—"}
           </Field>
           <Field label="Custo">{formatUSD(ciclo.cost_usd)}</Field>
+          <Field label="Model">
+            {ciclo.model ? (
+              <span className="font-mono text-xs">{ciclo.model}</span>
+            ) : (
+              "—"
+            )}
+          </Field>
+          <Field label="Andaime">
+            {ciclo.andaime_version ? (
+              <span className="font-mono text-xs">{ciclo.andaime_version}</span>
+            ) : (
+              "—"
+            )}
+          </Field>
           <Field label="Tokens (in / out)">
             {ciclo.tokens_input == null && ciclo.tokens_output == null
               ? "—"
