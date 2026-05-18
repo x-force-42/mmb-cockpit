@@ -40,7 +40,11 @@ export function EpicoDetailPage() {
             <CardTitle className="text-lg font-semibold">
               {epico.slug}
             </CardTitle>
-            <EpicoStatusBadge status={epico.status} />
+            <EpicoStatusBadge
+              status={epico.status}
+              ciclosTotal={epico.ciclos_total}
+              ciclosCompletos={epico.ciclos_completos}
+            />
           </div>
           <CardDescription className="font-mono text-xs">
             Iniciado em {formatDateTime(epico.started_at)}

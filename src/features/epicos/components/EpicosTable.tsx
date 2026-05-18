@@ -60,7 +60,11 @@ export function EpicosTable({ epicos }: Props) {
                   </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <EpicoStatusBadge status={e.status} />
+                  <EpicoStatusBadge
+                    status={e.status}
+                    ciclosTotal={e.ciclos_total}
+                    ciclosCompletos={e.ciclos_completos}
+                  />
                 </TableCell>
                 <TableCell className="font-mono text-xs tabular-nums">
                   {formatDateTime(e.started_at)}
