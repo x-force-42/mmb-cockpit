@@ -10,18 +10,6 @@ export function Header({ collapsed, onToggleSidebar }: HeaderProps) {
   return (
     <header className="flex h-14 items-center justify-between border-b bg-background px-4">
       <div className="flex items-center gap-2.5">
-        <button
-          type="button"
-          onClick={onToggleSidebar}
-          aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
-          className="flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
-        >
-          {collapsed ? (
-            <PanelLeftOpen className="size-4" />
-          ) : (
-            <PanelLeftClose className="size-4" />
-          )}
-        </button>
         <span
           aria-hidden
           className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground"
@@ -44,6 +32,18 @@ export function Header({ collapsed, onToggleSidebar }: HeaderProps) {
         >
           {/* placeholder pro indicador de projeto ativo (vem em F3+) */}
         </div>
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
+          className="flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
+        >
+          {collapsed ? (
+            <PanelLeftOpen className="size-4" />
+          ) : (
+            <PanelLeftClose className="size-4" />
+          )}
+        </button>
         <ThemeToggle />
       </div>
     </header>
