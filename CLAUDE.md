@@ -1,96 +1,70 @@
 # CLAUDE.md — mmb-cockpit
 
-Guia pra sessões Claude que operam neste repo.
+> O `mmb-cockpit` é um **target interno** do MMB (runtime de
+> orquestração agnóstico a target). Exerce papel de **governança
+> retrospectiva**: SPA Vite + React + TS que consome a API REST do
+> `mmb-logger` em `localhost:8765`.
 
-## O que é este projeto
+Esta sessão Claude pode estar operando em **3 modos**. Identifique o
+seu antes de qualquer ação.
 
-**mmb-cockpit** é a interface visual do Cockpit de Operações do
-[Mr. Meeseeks Box](https://github.com/eliezer-cardoso/mr-meeseeks-box).
-SPA Vite + React + TypeScript + Vitest, consumindo a API REST
-exposta pelo MMB em `localhost:8765`.
+## Modo 1 — Atômico spawnado pelo andaime
 
-A base inteira (strings, comentários, docs voltados pro Rick)
-está em **português brasileiro**. Componentes de UI usam termos
-em inglês quando são técnicos (Run, Project, Metrics) e pt-BR
-quando são da fala — mantém a coerência com o ecossistema MMB
-+ Rick & Morty (Garagem, Meeseeks).
+Você nasceu via `/MMB/.tooling/bin/spawn-atomic.sh`. Está numa
+worktree `.worktrees/<id>-<slug>/`, branch `task/<id>-<slug>`, pane
+tmux com auto-kill em 8s pós-PR. Brief é a sub-issue do GitHub.
 
-## Onde mora o resto do ecossistema
+→ **Leia:** [`/MMB/.tooling/profiles/atomic-agent.md`](../.tooling/profiles/atomic-agent.md) (autoritativo)
+→ **Brief:** `gh issue view <N> --repo x-force-42/mmb-cockpit`
+→ **PR:** abre via `open-pr.sh`; **nunca mergeia** (guardrail A10)
 
-| Repo | Path local | Papel |
-|---|---|---|
-| `mr-meeseeks-box` | `~/llab/mr-meeseeks-box` | Bot Discord + Garagem + Meeseeks + API |
-| `mmb-cockpit` | `~/llab/mmb-cockpit` (este) | UI de inspeção retrospectiva |
-| `mmb-fixture` | `~/llab/mmb-fixture` | Projeto-alvo dos testes E2E do MMB |
+Detecção rápida: variável `$MMB_AGENT_ID` está exportada no env
+(injetada por `spawn-atomic.sh`).
 
-## Camada agêntica — onde ler antes de operar
+## Modo 2 — Worker stateless do andaime
 
-Este projeto opera com workflow estruturado de orquestrador +
-agentes delegados em worktrees paralelas. Dependendo do seu papel
-nesta sessão, leia o doc certo:
+Você foi spawnado pelo `commd` ao chegar mensagem em
+`/MMB/.tooling/inbox/cockpit/`. Vida curta: processa uma mensagem,
+escreve 2–5 linhas via stdout, morre. Sem worktree, CWD é a raiz do
+cockpit.
 
-- **Você é uma sessão Claude na raiz do mmb-cockpit** (orquestrador),
-  e o Rick está conversando contigo sobre planejar, discutir,
-  delegar, revisar entregas, atualizar docs? → leia
-  [`docs/ORQUESTRADOR.md`](docs/ORQUESTRADOR.md).
-- **Você é uma sessão Claude em uma worktree** (agente delegado),
-  iniciada via `scripts/task-start.sh <id>`? → leia
-  [`docs/tasks/PROTOCOLO.md`](docs/tasks/PROTOCOLO.md) primeiro,
-  depois o brief da sua task em `docs/tasks/<id>-<slug>.md`.
+→ **Leia:** [`/MMB/.tooling/profiles/project-orchestrator.md`](../.tooling/profiles/project-orchestrator.md) (autoritativo)
+→ **Mensagem:** path absoluto passado como `$2` do `worker.sh`
+→ **Materialização de sub-issue:** [`/MMB/.tooling/bin/create-task-issue.sh`](../.tooling/bin/create-task-issue.sh)
+→ **Spawn atômico:** [`/MMB/.tooling/bin/spawn-atomic.sh`](../.tooling/bin/spawn-atomic.sh)
 
-## Operação como agente de task (bootstrap)
+Detecção rápida: invocado por `worker.sh cockpit <path>`; CWD é
+`/MMB/mmb-cockpit/`; sem `MMB_AGENT_ID`.
 
-Se você é uma sessão Claude recém-iniciada neste repo e o Rick
-ainda não te disse o que fazer, **siga este protocolo antes de
-qualquer outra coisa**:
+## Modo 3 — Sessão manual
 
-1. **Verifique se está numa worktree de task, não na raiz do repo.**
-   Rode `git rev-parse --show-toplevel` e `git branch --show-current`.
-   - Se você está na raiz do mmb-cockpit (`/home/eliezer/llab/mmb-cockpit`)
-     e na branch `master`: avise o Rick e ofereça rodar
-     `scripts/task-start.sh <id>` pra criar a worktree antes de começar.
-   - Se você está numa worktree (`.../.worktrees/<id>-<slug>`) e na
-     branch `task/<id>-<slug>`: ok, prossiga.
+Rick rodou `claude` direto neste repo, fora do andaime — modo dev
+tradicional ou operação local via `scripts/task-start.sh <id>`. Este
+protocolo é **independente do andaime** (foi importado do
+`mr-meeseeks-box` antes do andaime existir) e segue válido para
+trabalho manual sem orquestração cross-repo.
 
-2. **Liste as tasks abertas**. Leia `docs/tasks/INDEX.md` — é o
-   registro canônico. Identifique as marcadas com 🎯 (prontas pra
-   delegar) e, se já está numa worktree, qual delas casa com o slug
-   da branch atual.
+→ **Orquestrador local** (sessão na raiz, conversando com Rick): [`docs/ORQUESTRADOR.md`](docs/ORQUESTRADOR.md)
+→ **Agente delegado em worktree**: [`docs/tasks/PROTOCOLO.md`](docs/tasks/PROTOCOLO.md) + brief específico em [`docs/tasks/<id>-<slug>.md`](docs/tasks/)
+→ **Índice de tasks**: [`docs/tasks/INDEX.md`](docs/tasks/INDEX.md)
 
-3. **Pergunte ao Rick** via `AskUserQuestion` qual task ele quer
-   que você atue (ou se prefere uma conversa exploratória sem
-   entrar em task). Se já está numa worktree, sugira como primeira
-   opção a task da branch atual.
+Detecção rápida: você não foi spawnado pelo andaime (sem
+`MMB_AGENT_ID`, sem mensagem como parâmetro); Rick está
+conversando contigo aqui.
 
-4. **Quando ele escolher, leia o brief específico**
-   (`docs/tasks/<id>-<slug>.md`). Trate o brief como autoritativo.
+## Stack confirmada
 
-5. **Antes de qualquer edit**, releia `docs/tasks/PROTOCOLO.md`,
-   especialmente o pré-flight de 4 invariantes.
+- **Vite + React + TypeScript + Vitest**
+- **Tailwind + shadcn/ui** — UI shell
+- **TanStack Query + MSW** — data layer + mocks
+- **react-router** — roteamento
+- API consumida: `mmb-logger` em `localhost:8765`
 
-6. **Confirme decisões em aberto** do brief com o Rick antes de
-   implementar. Não chute.
+Comentários e docs voltados pro Rick em pt-BR; termos técnicos de UI
+em inglês quando convencionais (Run, Project, Metrics).
 
-7. **Trabalhe**. Commits pequenos, mensagens descritivas, hooks
-   nunca pulados, `master` nunca recebe push direto. Você abre PR
-   — só o Rick mergeia.
+## Quando NÃO seguir nenhum dos 3 protocolos
 
-8. **Ao terminar**, relate em formato curto: o que foi feito, o que
-   ficou aberto, decisões tomadas no caminho.
-
-Se nada disso se aplica (Rick está fazendo pergunta exploratória,
-debug, ou trabalho fora de uma task formal), apenas responda o que
-foi perguntado.
-
-## Convenções específicas do cockpit
-
-(Vão sendo preenchidas conforme o orquestrador alinhar com Rick.
-Hoje estão em aberto — F0 e tasks subsequentes vão decidir e
-codificar:)
-
-- Stack: Vite + React + TypeScript + Vitest (núcleo confirmado).
-- Roteamento: a decidir (react-router provável).
-- Estilo: a decidir (Tailwind / CSS modules / outro).
-- Data fetching: a decidir (TanStack Query / SWR / fetch puro).
-- Gráficos: a decidir (recharts / visx / nivo).
-- Linter/formatter: a decidir (ESLint+Prettier / Biome).
+- Pergunta exploratória do Rick ("e se a gente..."). Responda direto.
+- Debug isolado de bug específico — debug, não vira task.
+- Rick disse "rapidinho, esquece o protocolo". Obedeça.
