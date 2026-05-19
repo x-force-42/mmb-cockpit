@@ -7,7 +7,8 @@ import { renderWithProviders } from "@/test/render";
 import { AndaimeVersionFilter } from "./AndaimeVersionFilter";
 
 describe("AndaimeVersionFilter", () => {
-  it("renderiza um checkbox pra cada tag retornada pela API", async () => {
+  it("abre popover com uma opção por tag retornada pela API", async () => {
+    const user = userEvent.setup();
     renderWithProviders(
       <AndaimeVersionFilter
         idPrefix="t"
@@ -16,7 +17,11 @@ describe("AndaimeVersionFilter", () => {
       />,
     );
 
-    expect(await screen.findByLabelText("v0.7.0")).toBeInTheDocument();
+    const trigger = await screen.findByRole("combobox", {
+      name: /versão do andaime/i,
+    });
+    await user.click(trigger);
+
     for (const tag of [
       "v0.7.0",
       "v0.6.0",
@@ -27,7 +32,9 @@ describe("AndaimeVersionFilter", () => {
       "v0.1",
       "v0",
     ]) {
-      expect(screen.getByLabelText(tag)).toBeInTheDocument();
+      expect(
+        await screen.findByRole("option", { name: tag }),
+      ).toBeInTheDocument();
     }
   });
 
@@ -47,8 +54,8 @@ describe("AndaimeVersionFilter", () => {
       />,
     );
 
-    expect(screen.getByLabelText(/carregando versões/i)).toBeInTheDocument();
-    expect(await screen.findByLabelText("v0.7.0")).toBeInTheDocument();
+    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+    await screen.findByRole("combobox", { name: /versão do andaime/i });
   });
 
   it("renderiza fallback quando a query falha", async () => {
@@ -82,7 +89,11 @@ describe("AndaimeVersionFilter", () => {
       />,
     );
 
-    await user.click(await screen.findByLabelText("v0.6.0"));
+    const trigger = await screen.findByRole("combobox", {
+      name: /versão do andaime/i,
+    });
+    await user.click(trigger);
+    await user.click(await screen.findByRole("option", { name: "v0.6.0" }));
     expect(onChange).toHaveBeenCalledWith(["v0.5.0", "v0.6.0"]);
   });
 
@@ -97,7 +108,11 @@ describe("AndaimeVersionFilter", () => {
       />,
     );
 
-    await user.click(await screen.findByLabelText("v0.5.0"));
+    const trigger = await screen.findByRole("combobox", {
+      name: /versão do andaime/i,
+    });
+    await user.click(trigger);
+    await user.click(await screen.findByRole("option", { name: "v0.5.0" }));
     expect(onChange).toHaveBeenCalledWith(["v0.6.0"]);
   });
 });

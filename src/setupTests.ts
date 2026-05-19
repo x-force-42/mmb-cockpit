@@ -3,6 +3,20 @@ import { afterAll, afterEach, beforeAll, vi } from "vitest";
 import { resetMocks } from "./api/mocks/handlers";
 import { server } from "./api/mocks/server";
 
+// jsdom não implementa ResizeObserver nem Element.scrollIntoView;
+// cmdk/radix-popover precisam dos dois.
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+(globalThis as { ResizeObserver?: unknown }).ResizeObserver = ResizeObserverStub;
+if (typeof Element !== "undefined" && !Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function scrollIntoView() {
+    // no-op em jsdom
+  };
+}
+
 // jsdom não implementa matchMedia; sonner+next-themes precisa.
 Object.defineProperty(window, "matchMedia", {
   writable: true,
