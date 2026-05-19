@@ -1,4 +1,5 @@
 import { SlidersHorizontal } from "lucide-react";
+import { useProjetos } from "@/api/queries/projetos";
 import { AndaimeVersionFilter } from "@/components/AndaimeVersionFilter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,14 +21,23 @@ const STATUS_OPTIONS: { value: EpicoStatus; label: string }[] = [
   { value: "fechado", label: "fechado" },
 ];
 
+/**
+ * Filtros da página de épicos. `project` não é nativo da API de épicos —
+ * vira interseção client-side no `EpicosListPage` (cruza com ciclos).
+ */
+export type EpicosPageFilters = EpicosListQuery & { project?: string };
+
 interface Props {
-  filters: EpicosListQuery;
-  onChange: (next: EpicosListQuery) => void;
+  filters: EpicosPageFilters;
+  onChange: (next: EpicosPageFilters) => void;
   onClear: () => void;
 }
 
 export function EpicosFilters({ filters, onChange, onClear }: Props) {
-  const update = (patch: Partial<EpicosListQuery>) =>
+  const projetosQuery = useProjetos();
+  const projetos = projetosQuery.data?.items ?? [];
+
+  const update = (patch: Partial<EpicosPageFilters>) =>
     onChange({ ...filters, ...patch, offset: 0 });
 
   return (
@@ -43,6 +53,30 @@ export function EpicosFilters({ filters, onChange, onClear }: Props) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap items-end gap-3">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="filter-epico-project" className="text-xs">
+              Projeto
+            </Label>
+            <Select
+              value={filters.project ?? ALL}
+              onValueChange={(v) =>
+                update({ project: v === ALL ? undefined : v })
+              }
+            >
+              <SelectTrigger id="filter-epico-project" className="w-44">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={ALL}>Todos os projetos</SelectItem>
+                {projetos.map((p) => (
+                  <SelectItem key={p.slug} value={p.slug}>
+                    {p.name || p.slug}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="flex flex-col gap-1">
             <Label htmlFor="filter-epico-status" className="text-xs">
               Status

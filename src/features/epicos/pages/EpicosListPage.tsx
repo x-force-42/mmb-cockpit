@@ -1,5 +1,6 @@
 import { Inbox, RefreshCw, ServerCrash } from "lucide-react";
-import { useState } from "react";
+import { useMemo } from "react";
+import { useCiclos } from "@/api/queries/ciclos";
 import { useEpicos } from "@/api/queries/epicos";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,20 +12,51 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pagination } from "@/features/ciclos/components/Pagination";
+import { usePersistedFilters } from "@/lib/usePersistedFilters";
 import type { EpicosListQuery } from "@/types/api";
-import { EpicosFilters } from "../components/EpicosFilters";
+import {
+  type EpicosPageFilters,
+  EpicosFilters,
+} from "../components/EpicosFilters";
 import { EpicosTable } from "../components/EpicosTable";
 
 const DEFAULT_LIMIT = 25;
+const FILTERS_KEY = "mmb-cockpit:filters:epicos:v1";
 
-const INITIAL_FILTERS: EpicosListQuery = {
+const INITIAL_FILTERS: EpicosPageFilters = {
   limit: DEFAULT_LIMIT,
   offset: 0,
 };
 
 export function EpicosListPage() {
-  const [filters, setFilters] = useState<EpicosListQuery>(INITIAL_FILTERS);
-  const query = useEpicos(filters);
+  const [filters, setFilters] = usePersistedFilters<EpicosPageFilters>(
+    FILTERS_KEY,
+    INITIAL_FILTERS,
+  );
+
+  // O filtro `project` não é nativo da API de épicos: cruzamos com ciclos
+  // pra interseção client-side. TODO: mover pro backend quando logger
+  // expuser `/api/epicos?project=`.
+  const { project, ...apiFilters } = filters;
+  const query = useEpicos(apiFilters as EpicosListQuery);
+  const ciclosByProject = useCiclos(
+    project ? { project, limit: 500 } : {},
+  );
+
+  const epicoIdsByProject = useMemo<Set<string> | null>(() => {
+    if (!project) return null;
+    const set = new Set<string>();
+    for (const c of ciclosByProject.data?.items ?? []) {
+      set.add(c.epico_id);
+    }
+    return set;
+  }, [project, ciclosByProject.data]);
+
+  const filteredItems = useMemo(() => {
+    if (!query.data) return null;
+    if (!epicoIdsByProject) return query.data.items;
+    return query.data.items.filter((e) => epicoIdsByProject.has(e.id));
+  }, [query.data, epicoIdsByProject]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -45,13 +77,15 @@ export function EpicosListPage() {
         <TableLoadingSkeleton />
       ) : query.isError ? (
         <EpicosError onRetry={() => query.refetch()} />
-      ) : query.data && query.data.items.length === 0 ? (
+      ) : query.data && filteredItems && filteredItems.length === 0 ? (
         <EpicosEmpty />
-      ) : query.data ? (
+      ) : query.data && filteredItems ? (
         <div className="flex flex-col gap-3">
-          <EpicosTable epicos={query.data.items} />
+          <EpicosTable epicos={filteredItems} />
           <Pagination
-            total={query.data.total}
+            total={
+              epicoIdsByProject ? filteredItems.length : query.data.total
+            }
             limit={query.data.limit}
             offset={query.data.offset}
             onChange={(offset) => setFilters((f) => ({ ...f, offset }))}
