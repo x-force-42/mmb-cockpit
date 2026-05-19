@@ -35,6 +35,35 @@ export function formatDuration(seconds: number | null | undefined): string {
   return `${m}m ${s}s`;
 }
 
+/**
+ * Formata o intervalo entre dois timestamps ISO no formato HH:MM:SS.
+ * Aceita `end == null` (ciclo em andamento) e retorna "—" se ambos forem null.
+ */
+export function formatDurationBetween(
+  start: string | null | undefined,
+  end: string | null | undefined,
+): string {
+  if (!start) return "—";
+  const startMs = new Date(start).getTime();
+  const endMs = end ? new Date(end).getTime() : Date.now();
+  if (Number.isNaN(startMs) || Number.isNaN(endMs)) return "—";
+  let totalSec = Math.max(0, Math.floor((endMs - startMs) / 1000));
+  const h = Math.floor(totalSec / 3600);
+  totalSec -= h * 3600;
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec - m * 60;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+/** Formata número compacto: 1234 → "1.2k", 1_500_000 → "1.5M". */
+export function formatCompact(value: number | null | undefined): string {
+  if (value == null) return "—";
+  if (value < 1000) return String(value);
+  if (value < 1_000_000) return `${(value / 1000).toFixed(1)}k`;
+  return `${(value / 1_000_000).toFixed(1)}M`;
+}
+
 export function formatDateTime(iso: string): string {
   return dateTimeFormatter.format(new Date(iso));
 }

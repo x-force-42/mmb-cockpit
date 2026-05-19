@@ -18,11 +18,13 @@ function renderAt(id: string) {
 }
 
 describe("CicloDetailPage", () => {
-  it("ciclo em pr_aberto: metadata + form de review ativo + eventos", async () => {
+  it("ciclo em pr_aberto: KPIs + form de review ativo + eventos", async () => {
     renderAt(PR_ABERTO_ID);
 
     await waitFor(() => {
-      expect(screen.getByText("Metadados")).toBeInTheDocument();
+      expect(
+        screen.getByRole("region", { name: /indicadores do ciclo/i }),
+      ).toBeInTheDocument();
     });
     expect(screen.getByText("Review")).toBeInTheDocument();
     expect(screen.getByLabelText("Nota")).toBeInTheDocument();
@@ -31,7 +33,7 @@ describe("CicloDetailPage", () => {
     expect(screen.getByText("Eventos")).toBeInTheDocument();
   });
 
-  it("ciclo abortado: mostra AbortCard e form desabilitado", async () => {
+  it("ciclo abortado: mostra AbortCard, abort_origin no status, form desabilitado", async () => {
     renderAt(ABORTADO_ID);
 
     await waitFor(() => {
@@ -45,11 +47,13 @@ describe("CicloDetailPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("ciclo planejado: form desabilitado com hint, sem PR", async () => {
+  it("ciclo planejado: KPIs renderizam, form desabilitado com hint", async () => {
     renderAt(PLANEJADO_ID);
 
     await waitFor(() => {
-      expect(screen.getByText("Metadados")).toBeInTheDocument();
+      expect(
+        screen.getByRole("region", { name: /indicadores do ciclo/i }),
+      ).toBeInTheDocument();
     });
     expect(screen.getByLabelText("Nota")).toBeDisabled();
     expect(
