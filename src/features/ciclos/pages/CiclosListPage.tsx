@@ -1,5 +1,5 @@
 import { Inbox, RefreshCw, ServerCrash } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useCiclos } from "@/api/queries/ciclos";
 import { useEpicos } from "@/api/queries/epicos";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePersistedFilters } from "@/lib/usePersistedFilters";
 import type { CiclosListOrder, CiclosListQuery } from "@/types/api";
 import { CiclosFilters } from "../components/CiclosFilters";
 import { CiclosTable } from "../components/CiclosTable";
 import { Pagination } from "../components/Pagination";
 
 const DEFAULT_LIMIT = 25;
+const FILTERS_KEY = "mmb-cockpit:filters:ciclos:v1";
 
 const INITIAL_FILTERS: CiclosListQuery = {
   limit: DEFAULT_LIMIT,
@@ -25,7 +27,10 @@ const INITIAL_FILTERS: CiclosListQuery = {
 };
 
 export function CiclosListPage() {
-  const [filters, setFilters] = useState<CiclosListQuery>(INITIAL_FILTERS);
+  const [filters, setFilters] = usePersistedFilters<CiclosListQuery>(
+    FILTERS_KEY,
+    INITIAL_FILTERS,
+  );
   const query = useCiclos(filters);
   const epicosQuery = useEpicos();
 

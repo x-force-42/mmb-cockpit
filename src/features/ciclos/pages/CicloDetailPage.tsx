@@ -13,7 +13,9 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import type { CicloDetail } from "@/types/api";
 import { AbortCard } from "../components/AbortCard";
-import { CicloMetadata } from "../components/CicloMetadata";
+import { CicloContextoHumano } from "../components/CicloContextoHumano";
+import { CicloEventosSintese } from "../components/CicloEventosSintese";
+import { CicloKpiCards } from "../components/CicloKpiCards";
 import { CicloReviewForm } from "../components/CicloReviewForm";
 import { EventosTimeline } from "../components/EventosTimeline";
 
@@ -40,13 +42,18 @@ export function CicloDetailPage() {
   return (
     <div className="flex flex-col gap-4">
       <Breadcrumb ciclo={ciclo} epicoSlug={epicoSlug} />
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_22rem]">
-        <CicloMetadata ciclo={ciclo} />
-        <CicloReviewForm ciclo={ciclo} />
-      </div>
+
+      <CicloKpiCards ciclo={ciclo} />
+
+      <CicloEventosSintese cicloId={ciclo.id} />
+
+      <CicloContextoHumano ciclo={ciclo} />
+
       {ciclo.status === "abortado" ? <AbortCard ciclo={ciclo} /> : null}
-      <BriefingCard ciclo={ciclo} />
+
       <EventosTimeline cicloId={ciclo.id} />
+
+      <CicloReviewForm ciclo={ciclo} />
     </div>
   );
 }
@@ -80,35 +87,17 @@ function Breadcrumb({
   );
 }
 
-function BriefingCard({ ciclo }: { ciclo: CicloDetail }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">Briefing</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {ciclo.briefing_md ? (
-          <pre className="overflow-x-auto whitespace-pre-wrap rounded-md bg-muted p-3 text-sm leading-relaxed">
-            {ciclo.briefing_md}
-          </pre>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Sem briefing registrado.
-          </p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
 function DetailSkeleton() {
   return (
     <div className="flex flex-col gap-4">
       <Skeleton className="h-4 w-64" />
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_22rem]">
-        <Skeleton className="h-72" />
-        <Skeleton className="h-72" />
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders intercambiáveis
+          <Skeleton key={i} className="h-20" />
+        ))}
       </div>
+      <Skeleton className="h-16" />
       <Skeleton className="h-40" />
     </div>
   );

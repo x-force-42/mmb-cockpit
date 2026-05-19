@@ -36,7 +36,11 @@ describe("CiclosListPage", () => {
       expect(screen.getByText(/scaffold inicial PixiJS/i)).toBeInTheDocument();
     });
 
-    await user.click(screen.getByLabelText("v0.5.0"));
+    const trigger = await screen.findByRole("combobox", {
+      name: /versão do andaime/i,
+    });
+    await user.click(trigger);
+    await user.click(await screen.findByRole("option", { name: "v0.5.0" }));
 
     await waitFor(() => {
       expect(

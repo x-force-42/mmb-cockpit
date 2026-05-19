@@ -31,8 +31,12 @@ describe("EpicosListPage", () => {
       expect(screen.getByText("aquarium-prototipo")).toBeInTheDocument();
     });
 
-    // marca a tag do épico mmb-logger-destilacao (v0.5.0 nas fixtures)
-    await user.click(screen.getByLabelText("v0.5.0"));
+    // abre o combobox de versão do andaime e marca v0.5.0
+    const trigger = await screen.findByRole("combobox", {
+      name: /versão do andaime/i,
+    });
+    await user.click(trigger);
+    await user.click(await screen.findByRole("option", { name: "v0.5.0" }));
 
     await waitFor(() => {
       expect(screen.getByText("mmb-logger-destilacao")).toBeInTheDocument();
@@ -40,7 +44,7 @@ describe("EpicosListPage", () => {
     });
 
     // desmarcar volta a mostrar tudo
-    await user.click(screen.getByLabelText("v0.5.0"));
+    await user.click(await screen.findByRole("option", { name: "v0.5.0" }));
     await waitFor(() => {
       expect(screen.getByText("aquarium-prototipo")).toBeInTheDocument();
     });
