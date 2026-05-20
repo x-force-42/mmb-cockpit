@@ -1,6 +1,22 @@
-import { ExternalLink } from "lucide-react";
+import {
+  Bot,
+  CircleCheck,
+  CircleDollarSign,
+  Clock,
+  Cpu,
+  ExternalLink,
+  GitBranch,
+  GitCompare,
+  GitPullRequest,
+  type LucideIcon,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   formatAbortOrigin,
   formatCompact,
@@ -47,12 +63,19 @@ export function CicloKpiCards({ ciclo }: Props) {
       aria-label="Indicadores do ciclo"
       className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
     >
-      <Kpi label="Duração" value={duration} mono={!isRunning} />
-      <Kpi label="Custo" value={formatUSD(ciclo.cost_usd)} mono />
-      <Kpi label="Tokens (in / out)" value={tokensLabel} mono />
-      <Kpi label="Diff" value={diff} />
+      <Kpi label="Duração" value={duration} icon={Clock} mono={!isRunning} />
+      <Kpi
+        label="Custo"
+        value={formatUSD(ciclo.cost_usd)}
+        icon={CircleDollarSign}
+        accent="text-kpi-custo"
+        mono
+      />
+      <Kpi label="Tokens (in / out)" value={tokensLabel} icon={Cpu} mono />
+      <Kpi label="Diff" value={diff} icon={GitCompare} />
       <Kpi
         label="Status"
+        icon={CircleCheck}
         value={
           <div className="flex flex-wrap items-center gap-2">
             <CicloStatusBadge status={ciclo.status} />
@@ -66,6 +89,7 @@ export function CicloKpiCards({ ciclo }: Props) {
       />
       <Kpi
         label="Modelo Claude"
+        icon={Bot}
         value={
           ciclo.model ? (
             <span className="font-mono text-xs">{ciclo.model}</span>
@@ -76,6 +100,7 @@ export function CicloKpiCards({ ciclo }: Props) {
       />
       <Kpi
         label="Andaime"
+        icon={GitBranch}
         value={
           ciclo.andaime_version ? (
             <span className="font-mono text-xs">{ciclo.andaime_version}</span>
@@ -86,6 +111,7 @@ export function CicloKpiCards({ ciclo }: Props) {
       />
       <Kpi
         label="Pull request"
+        icon={GitPullRequest}
         value={
           ciclo.pr_url && ciclo.pr_number ? (
             <a
@@ -112,24 +138,33 @@ export function CicloKpiCards({ ciclo }: Props) {
 function Kpi({
   label,
   value,
+  icon: Icon,
+  accent,
   mono,
 }: {
   label: string;
   value: React.ReactNode;
+  icon: LucideIcon;
+  accent?: string;
   mono?: boolean;
 }) {
   return (
     <Card className="gap-1 py-3">
-      <CardContent className="flex flex-col gap-1 px-3">
-        <span className="text-xs text-muted-foreground">{label}</span>
-        <span
+      <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 px-3 pb-1">
+        <CardTitle className="text-xs font-normal text-muted-foreground">
+          {label}
+        </CardTitle>
+        <Icon className={cn("size-4", accent ?? "text-muted-foreground")} aria-hidden />
+      </CardHeader>
+      <CardContent className="px-3 pt-0">
+        <div
           className={cn(
             "text-base font-medium",
             mono && "font-mono tabular-nums",
           )}
         >
           {value}
-        </span>
+        </div>
       </CardContent>
     </Card>
   );
