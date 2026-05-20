@@ -43,17 +43,23 @@ export function CicloDetailPage() {
     <div className="flex flex-col gap-4">
       <Breadcrumb ciclo={ciclo} epicoSlug={epicoSlug} />
 
-      <CicloKpiCards ciclo={ciclo} />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="flex flex-col gap-4">
+          <CicloKpiCards ciclo={ciclo} />
 
-      <CicloEventosSintese cicloId={ciclo.id} />
+          <CicloEventosSintese cicloId={ciclo.id} />
 
-      <CicloContextoHumano ciclo={ciclo} />
+          <CicloContextoHumano ciclo={ciclo} />
 
-      {ciclo.status === "abortado" ? <AbortCard ciclo={ciclo} /> : null}
+          {ciclo.status === "abortado" ? <AbortCard ciclo={ciclo} /> : null}
 
-      <EventosTimeline cicloId={ciclo.id} />
+          <EventosTimeline cicloId={ciclo.id} />
+        </div>
 
-      <CicloReviewForm ciclo={ciclo} />
+        <aside className="lg:sticky lg:top-4 lg:self-start">
+          <CicloReviewForm ciclo={ciclo} />
+        </aside>
+      </div>
     </div>
   );
 }
