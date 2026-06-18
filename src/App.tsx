@@ -5,6 +5,8 @@ import { CiclosListPage } from "./features/ciclos/pages/CiclosListPage";
 import { DashboardPage } from "./features/dashboard/pages/DashboardPage";
 import { EpicoDetailPage } from "./features/epicos/pages/EpicoDetailPage";
 import { EpicosListPage } from "./features/epicos/pages/EpicosListPage";
+import { ProjetoDetailPage } from "./features/projetos/pages/ProjetoDetailPage";
+import { ProjetosListPage } from "./features/projetos/pages/ProjetosListPage";
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
         <Route path="/epicos/:id" element={<EpicoDetailPage />} />
         <Route path="/ciclos" element={<CiclosListPage />} />
         <Route path="/ciclos/:id" element={<CicloDetailPage />} />
+        <Route path="/projetos" element={<ProjetosListPage />} />
+        <Route path="/projetos/:id" element={<ProjetoDetailPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

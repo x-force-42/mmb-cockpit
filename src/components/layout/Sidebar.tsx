@@ -1,5 +1,6 @@
 import {
   Activity,
+  FolderKanban,
   LayoutDashboard,
   type LucideIcon,
   Target,
@@ -16,6 +17,7 @@ interface NavItem {
 
 const NAV_ITEMS: readonly NavItem[] = [
   { to: "/", label: "Dashboard", end: true, icon: LayoutDashboard },
+  { to: "/projetos", label: "Projetos", end: false, icon: FolderKanban },
   { to: "/epicos", label: "Épicos", end: false, icon: Target },
   { to: "/ciclos", label: "Ciclos", end: false, icon: Activity },
 ];

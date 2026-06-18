@@ -12,10 +12,12 @@ describe("Sidebar", () => {
     );
 
     const dashboard = screen.getByRole("link", { name: /dashboard/i });
+    const projetos = screen.getByRole("link", { name: /projetos/i });
     const epicos = screen.getByRole("link", { name: /épicos/i });
-    const ciclos = screen.getByRole("link", { name: /ciclos/i });
+    const ciclos = screen.getByRole("link", { name: /^ciclos$/i });
 
     expect(dashboard).toHaveAttribute("href", "/");
+    expect(projetos).toHaveAttribute("href", "/projetos");
     expect(epicos).toHaveAttribute("href", "/epicos");
     expect(ciclos).toHaveAttribute("href", "/ciclos");
   });
@@ -27,8 +29,19 @@ describe("Sidebar", () => {
       </MemoryRouter>,
     );
 
-    const ciclos = screen.getByRole("link", { name: /ciclos/i });
+    const ciclos = screen.getByRole("link", { name: /^ciclos$/i });
     expect(ciclos).toHaveAttribute("aria-current", "page");
+  });
+
+  it("marca o link de Projetos quando a rota está ativa", () => {
+    render(
+      <MemoryRouter initialEntries={["/projetos"]}>
+        <Sidebar collapsed={false} />
+      </MemoryRouter>,
+    );
+
+    const projetos = screen.getByRole("link", { name: /projetos/i });
+    expect(projetos).toHaveAttribute("aria-current", "page");
   });
 
   it("exibe labels dos itens quando expandido", () => {
@@ -39,6 +52,7 @@ describe("Sidebar", () => {
     );
 
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
+    expect(screen.getByText("Projetos")).toBeInTheDocument();
     expect(screen.getByText("Épicos")).toBeInTheDocument();
     expect(screen.getByText("Ciclos")).toBeInTheDocument();
   });
