@@ -11,12 +11,12 @@ import type {
   EpicoStatus,
   EpicosListResponse,
   MergedToMain,
-  ProjetoMetricas,
 } from "../../types/api";
 import { ciclos as initialCiclos } from "./fixtures/ciclos";
 import { epicos as initialEpicos } from "./fixtures/epicos";
 import { eventos as initialEventos } from "./fixtures/eventos";
 import { metricas } from "./fixtures/metricas";
+import { projetoMetricasFixtures } from "./fixtures/projeto-metricas";
 import { projetos } from "./fixtures/projetos";
 
 // Estado mutável em memória pra suportar PATCH entre testes.
@@ -326,49 +326,15 @@ export const handlers = [
   // ─── projetos ───────────────────────────────────────────────────────
   http.get("*/api/projetos", () => HttpResponse.json({ items: projetos })),
 
-  // Stub: agrega métricas a partir da fixture local de ciclos (apenas dev/teste).
-  // Fixtures definitivos vêm em 3.1.
   http.get("*/api/projetos/:id/metricas", ({ params }) => {
-    const projeto = projetos.find((p) => p.id === params.id);
-    if (!projeto) {
+    const fixture = projetoMetricasFixtures[String(params.id)];
+    if (!fixture) {
       return HttpResponse.json(
         { detail: "projeto não encontrado" },
         { status: 404 },
       );
     }
-    const doProjeto = ciclos.filter((c) => c.project === projeto.slug);
-    const status_breakdown: Record<string, number> = {};
-    const abort_breakdown: Record<string, number> = {};
-    let custo_total_usd = 0;
-    const duracoes: number[] = [];
-    for (const c of doProjeto) {
-      status_breakdown[c.status] = (status_breakdown[c.status] ?? 0) + 1;
-      if (c.abort_origin) {
-        abort_breakdown[c.abort_origin] =
-          (abort_breakdown[c.abort_origin] ?? 0) + 1;
-      }
-      if (c.cost_usd != null) custo_total_usd += c.cost_usd;
-      if (c.closed_complete_at) {
-        const start = new Date(c.planner_invoked_at).getTime();
-        const end = new Date(c.closed_complete_at).getTime();
-        if (!Number.isNaN(start) && !Number.isNaN(end) && end > start) {
-          duracoes.push((end - start) / 1000);
-        }
-      }
-    }
-    const tempo_medio_ciclo_segundos =
-      duracoes.length > 0
-        ? duracoes.reduce((a, b) => a + b, 0) / duracoes.length
-        : null;
-    const body: ProjetoMetricas = {
-      projeto_id: projeto.id,
-      custo_total_usd: Number(custo_total_usd.toFixed(4)),
-      ciclos_count: doProjeto.length,
-      status_breakdown,
-      abort_breakdown,
-      tempo_medio_ciclo_segundos,
-    };
-    return HttpResponse.json(body);
+    return HttpResponse.json(fixture);
   }),
 
   // ─── andaime versions ───────────────────────────────────────────────
