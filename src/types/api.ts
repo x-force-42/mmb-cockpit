@@ -172,6 +172,16 @@ export interface ProjetosListResponse {
   items: Projeto[];
 }
 
+/** Resposta de `GET /api/projetos/:id/metricas` — espelha o Pydantic do logger. */
+export interface ProjetoMetricas {
+  projeto_id: string;
+  custo_total_usd: number;
+  ciclos_count: number;
+  status_breakdown: Record<string, number>;
+  abort_breakdown: Record<string, number>;
+  tempo_medio_ciclo_segundos: number | null;
+}
+
 // ─── andaime versions ──────────────────────────────────────────────────
 
 export interface AndaimeVersionsResponse {
